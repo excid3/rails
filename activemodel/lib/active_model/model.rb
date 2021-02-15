@@ -59,6 +59,7 @@ module ActiveModel
   module Model
     extend ActiveSupport::Concern
     include ActiveModel::AttributeAssignment
+    include ActiveModel::Attributes
     include ActiveModel::Validations
     include ActiveModel::Conversion
 
