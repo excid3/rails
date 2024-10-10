@@ -72,7 +72,7 @@ $ rails --version
 Rails 8.0.0
 ```
 
-### Creating your first Rails app
+### Creating Your First Rails App
 
 Rails comes with several commands to make life easier. `rails new` generates a fresh Rails application for you. You can run `rails --help` to see all of the commands.
 
@@ -84,7 +84,7 @@ $ rails new store
 
 NOTE: You can use flags to customize the application Rails generates. To see those options, run `rails new --help`.
 
-After your new application is created, switch to it's directory:
+After your new application is created, switch to its directory:
 
 ```bash
 $ cd store
