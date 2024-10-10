@@ -37,11 +37,11 @@ $ brew install openssl@3 libyaml gmp rust
 
 # Install Mise version manager
 $ curl https://mise.run | sh
-$ echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+$ echo 'eval "$(~/.local/bin/mise activate)"' >> ~/.zshrc
 $ source ~/.zshrc
 
 # Install Ruby globally with Mise
-$ mise use -g ruby@3.3.5
+$ mise use -g ruby@3
 ```
 
 ### Installing Ruby on Ubuntu
@@ -55,11 +55,11 @@ $ sudo apt install build-essential rustc libssl-dev libyaml-dev zlib1g-dev libgm
 
 # Install Mise version manager
 $ curl https://mise.run | sh
-$ echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+$ echo 'eval "$(~/.local/bin/mise activate)"' >> ~/.bashrc
 $ source ~/.bashrc
 
 # Install Ruby globally with Mise
-$ mise use -g ruby@3.3.5
+$ mise use -g ruby@3
 ```
 
 ### Installing Ruby on Windows
@@ -89,7 +89,7 @@ $ echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
 $ source ~/.bashrc
 
 # Install Ruby globally with Mise
-$ mise use -g ruby@3.3.5
+$ mise use -g ruby@3
 ```
 
 Verifying your Ruby install
