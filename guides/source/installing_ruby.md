@@ -21,7 +21,7 @@ NOTE: Any commands prefaced with a dollar sign `$` should be run in the command 
 
 ### Installing Ruby on macOS
 
-For macOS, you'll need XCode Command Line Tools and Homebrew to install dependencies needed to compile Ruby.
+For macOS, you'll need Xcode Command Line Tools and Homebrew to install dependencies needed to compile Ruby.
 
 Open Terminal and run the following commands:
 
@@ -31,7 +31,7 @@ $ xcode-select --install
 
 # Install Homebrew and dependencies
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-$ export PATH="/opt/homebrew/bin:$PATH" >> ~/.zshrc
+$ echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
 $ source ~/.zshrc
 $ brew install openssl@3 libyaml gmp rust
 
@@ -71,7 +71,7 @@ You will need Windows 11 or Windows 10 version 2004 and higher (Build 19041 and 
 Open PowerShell or Windows Command Prompt and run:
 
 ```bash
-$ wsl --install --distribution Ubuntu
+$ wsl --install --distribution Ubuntu-24.04
 ```
 
 You may need to reboot during the installation process.
