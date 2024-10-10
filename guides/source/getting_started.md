@@ -1346,6 +1346,10 @@ nav {
 img {
   max-width: 800px;
 }
+
+.notice {
+  color: green;
+}
 ```
 
 Refresh your page and you'll see the CSS has been applied.
@@ -1670,6 +1674,7 @@ We also need a controller to create these subscribers. Let's create that in `app
 
 ```ruby
 class SubscribersController < ApplicationController
+  allow_unauthenticated_access
   before_action :set_product
 
   def create
@@ -1689,7 +1694,21 @@ class SubscribersController < ApplicationController
 end
 ```
 
-To subscriber users to a specific product, we'll use a nested route so we know which product the subscriber belongs to. In `config/routes.rb` change `resources :products` to the following:
+Our redirect sets a notice in the Rails flash. The flash is used for storing messages to display on the next page.
+
+To display the flash message, let's add the notice to `app/views/layouts/application.html.erb` inside the body:
+
+```erb
+<html>
+  <!-- ... -->
+  <body>
+    <div class="notice"><%= notice %></div>
+    <!-- ... -->
+  </body>
+</html>
+```
+
+To subscribe users to a specific product, we'll use a nested route so we know which product the subscriber belongs to. In `config/routes.rb` change `resources :products` to the following:
 
 ```ruby
   resources :products do
@@ -1699,20 +1718,26 @@ To subscriber users to a specific product, we'll use a nested route so we know w
 
 On the product show page, we can check if there is inventory and display the amount in stock. Otherwise, we can display an out of stock message with the subscribe form to get notified when it is back in stock.
 
-Add the following between the `cache` block and "Back" link.
+Add the following to a new partial at `app/views/products/_inventory.html.erb`.
 
 ```erb
-<% if @product.inventory_count? %>
-  <p><%= @product.inventory_count %> in stock</p>
+<% if product.inventory_count? %>
+  <p><%= product.inventory_count %> in stock</p>
 <% else %>
   <p>Out of stock</p>
   <p>Email me when available.</p>
 
-  <%= form_with model: [@product, Subscriber.new] do |form| %>
+  <%= form_with model: [product, Subscriber.new] do |form| %>
     <%= form.email_field :email, placeholder: "you@example.com", required: true %>
     <%= form.submit "Submit" %>
   <% end %>
 <% end %>
+```
+
+Then update `app/views/products/show.html.erb` to render this partial after the `cache` block.
+
+```erb
+<%= render "inventory", product: @product %>
 ```
 
 ### In stock email notifications
@@ -1766,10 +1791,10 @@ We use `product_url` instead of `product_path` in mailers because email clients 
 
 We can test an email by opening the Rails console and loading a product and subscriber to send to:
 
-```ruby
-product = Product.first
-subscriber = product.subscribers.first
-ProductMailer.with(product: product, subscriber: subscriber).in_stock.deliver_later
+```irb
+store(dev)> product = Product.first
+store(dev)> subscriber = product.subscribers.find_or_create_by(email: "subscriber@example.org")
+store(dev)> ProductMailer.with(product: product, subscriber: subscriber).in_stock.deliver_later
 ```
 
 You'll see that it prints out an email in the logs.
@@ -1852,7 +1877,7 @@ class Product < ApplicationRecord
 end
 ```
 
-`after_update_commit` is a callback that is fired after changes are saved to the database. `if: :back_in_stock?` tells the callback to run only if the `back_in_stock?` method returns true.
+`after_update_commit` is an Active Record callback that is fired after changes are saved to the database. `if: :back_in_stock?` tells the callback to run only if the `back_in_stock?` method returns true.
 
 Active Record keeps track of changes to attributes so `back_in_stock?` checks the previous value of `inventory_count` using `inventory_count_previously_was`. Then we can compare that against the current inventory count to determine if the product is back in stock.
 
@@ -1860,9 +1885,9 @@ Active Record keeps track of changes to attributes so `back_in_stock?` checks th
 
 ### Extracting A Concern
 
-The Product model now has several methods for handling notifications to subscribers. For better organization of our code, we can extract this to an `ActiveSupport::Concern`. A Concern is a Ruby module with some syntactic sugar for including modules into Ruby classes more easily.
+The Product model now has a decent amount of code for handling notifications. To better organize our code, we can extract this to an `ActiveSupport::Concern`. A Concern is a Ruby module with some syntactic sugar to make using them easier.
 
-Create a file at `app/models/product/notifications.rb` with the following code for product subscribers and notifications.
+Create a file at `app/models/product/notifications.rb` with the following:
 
 ```ruby
 module Product::Notifications
@@ -1885,6 +1910,8 @@ module Product::Notifications
 end
 ```
 
+The `included` block will execute in the context of the base class when the module is included and the methods will be added as instance methods.
+
 The Product model can now be simplified to include the Notifications module.
 
 ```ruby
@@ -1905,15 +1932,15 @@ Extracting code into concerns also helps make features reusable. For example, we
 
 ### Unsubscribe links
 
-A subscriber may want to unsubscribe at some point. Let's build that next.
+A subscriber may want to unsubscribe at some point, so let's build that next.
 
-First, we'll start by creating a route. This will be the URL we include in emails and will send to a controller for processing the unsubscribe.
+First, we need a route for unsubscribing that will be the URL we include in emails.
 
 ```ruby
   resource :unsubscribe, only: [ :show ]
 ```
 
-In the model, we can use a feature of Rails that generates unique tokens for different purposes. We'll add one for unsubscribing:
+Active Record has a feature called `generates_token_for` that can generate unique tokens to find database records for different purposes. We can use this for generating a unique unsubscribe token to use in the email's unsubscribe URL.
 
 ```ruby
 class Subscriber < ApplicationRecord
@@ -1922,26 +1949,29 @@ class Subscriber < ApplicationRecord
 end
 ```
 
-Our controller will be pretty straightforward. It will first look up the Subscriber record from the token in the URL. Once found, it will destroy the record and redirect to the product they were subscribed to.
+Our controller will first look up the Subscriber record from the token in the URL. Once the subscriber is found, it will destroy the record and redirect to the homepage.
 
 ```ruby
 class UnsubscribesController < ApplicationController
+  allow_unauthenticated_access
   before_action :set_subscriber
 
   def show
-    @subscriber.destroy
-    redirect_to @subscriber.product, notice: "Unsubscribed successfully."
+    @subscriber&.destroy
+    redirect_to root_path, notice: "Unsubscribed successfully."
   end
 
   private
 
   def set_subscriber
-    @subscriber = Subscriber.find_by_token_for!(:unsubscribe, params[:token])
+    @subscriber = Subscriber.find_by_token_for(:unsubscribe, params[:token])
   end
 end
 ```
 
-Last but not least, we can add an unsubscribe link to our email template to this route.
+Last but not least, let's add the unsubscribe link to our email templates.
+
+In `app/views/product_mailer/in_stock.html.erb`, add a `link_to`:
 
 ```erb
 <h1>Good news!</h1>
@@ -1951,12 +1981,25 @@ Last but not least, we can add an unsubscribe link to our email template to this
 <%= link_to "Unsubscribe", unsubscribe_url(token: params[:subscriber].generate_token_for(:unsubscribe)) %>
 ```
 
-Now when you click the unsubscribe link in an email, the subscriber record will be deleted from the database.
+In `app/views/product_mailer/in_stock.text.erb`, add the URL in plain text:
+
+```erb
+Good news!
+
+<%= @product.name %> is back in stock.
+<%= product_url(@product) %>
+
+Unsubscribe: <%= unsubscribe_url(token: params[:subscriber].generate_token_for(:unsubscribe)) %>
+```
+
+When the unsubscribe link is clicked, the subscriber record will be deleted from the database. The controller also safely handles invalid or expired tokens without raising any errors.
+
+Use the Rails console to send another email and test the unsubscribe link in the logs.
 
 Testing
 -------
 
-Let's write a test to ensure that the correct number of emails are sent when a product is back in stock.
+Rails comes with a robust test suite. Let's write a test to ensure that the correct number of emails are sent when a product is back in stock.
 
 ### Fixtures
 
@@ -1969,18 +2012,22 @@ tshirt:
   inventory_count: 15
 ```
 
-For subscribers, we can add 2 fixtures. You'll notice that we can reference the Product fixture by name here. Rails associates this automatically for us in the database so we don't have to manage record IDs and associations.
+For subscribers, we can add 2 fixtures.
 
 ```yaml
 # test/fixtures/subscribers.yml
-one:
+david:
   product: tshirt
   email: david@example.org
 
-two:
+chris:
   product: tshirt
   email: chris@example.org
 ```
+
+You'll notice that we can reference the Product fixture by name here. Rails associates this automatically for us in the database so we don't have to manage record IDs and associations in tests.
+
+These fixtures will be automatically inserted into the database when we run our test suite.
 
 ### Testing Emails
 
@@ -1994,6 +2041,8 @@ class ProductTest < ActiveSupport::TestCase
 
   test "sends email notifications when back in stock" do
     product = products(:tshirt)
+
+    # Set product out of stock
     product.update(inventory_count: 0)
 
     assert_emails 2 do
@@ -2003,13 +2052,17 @@ class ProductTest < ActiveSupport::TestCase
 end
 ```
 
-In this class, we first include the Action Mailer test helpers so we can monitor emails being sent out during our tests.
+Let's break down what this test is doing.
 
-Our test loads the tshirt fixture and returns the Active Record object for that record. We then ensure the tshirt as out of stock by updating it's inventory to 0.
+First, we include the Action Mailer test helpers so we can monitor emails sent during the test.
 
-Then we tell `assert_emails` to look for 2 emails generated by the code inside the block. Inside that block, we update the product to be in stock. This will trigger the `notify_subscribers` callback in the product model to send emails which is confirmed by `assert_emails`.
+The `tshirt` fixture is loaded using the `products()` fixture helper and returns the Active Record object for that record. Each fixture generates a helper in the test suite to make it easy to reference fixtures by name since their database IDs may be different each run.
 
-We can run the test suite with `bin/rails test`
+Then we ensure the tshirt as out of stock by updating it's inventory to 0.
+
+Next, we use `assert_emails` to ensure 2 emails were generated by the code inside the block. To trigger the emails, we update the product's inventory count inside the block. This triggers the `notify_subscribers` callback in the Product model to send emails. Once that's done executing, `assert_emails` counts the emails and ensures it matches the expected count.
+
+We can run the test suite with `bin/rails test` or an individual test file by passing the filename.
 
 ```bash
 $ bin/rails test test/models/product_test.rb
@@ -2024,7 +2077,38 @@ Finished in 0.343842s, 2.9083 runs/s, 5.8166 assertions/s.
 1 runs, 2 assertions, 0 failures, 0 errors, 0 skips
 ```
 
-Everything passes!
+Our test passes!
+
+Rails also generated an example test for `ProductMailer` at `test/mailers/product_mailer_test.rb`. Let's update it to make it also pass.
+
+```ruby
+require "test_helper"
+
+class ProductMailerTest < ActionMailer::TestCase
+  test "in_stock" do
+    mail = ProductMailer.with(product: products(:tshirt), subscriber: subscribers(:david)).in_stock
+    assert_equal "In stock", mail.subject
+    assert_equal [ "david@example.org" ], mail.to
+    assert_equal [ "from@example.com" ], mail.from
+    assert_match "Good news!", mail.body.encoded
+  end
+end
+```
+
+Let's run the entire test suite now and ensure all the tests pass.
+
+```bash
+$ bin/rails test
+Running 2 tests in a single process (parallelization threshold is 50)
+Run options: --seed 16302
+
+# Running:
+
+..
+
+Finished in 0.665856s, 3.0037 runs/s, 10.5128 assertions/s.
+2 runs, 7 assertions, 0 failures, 0 errors, 0 skips
+```
 
 You can use this as a starting place to continue building out a test suite with full coverage of the application features.
 
@@ -2039,11 +2123,15 @@ We can check our code for consistency by running:
 
 ```bash
 $ bin/rubocop
+Inspecting 53 files
+.....................................................
+
+53 files inspected, no offenses detected
 ```
 
-This will print out any issues and let us know what is wrong.
+This will print out any offenses and tell you what they are.
 
-Rubocop can automatically fix issues for us. We can do that using the `-a` flag to autocorrect issues as they're found. Run this command to have Rubocop update your files with consistently formatted code.
+Rubocop can autocorrect fix offsenses using the `-a` flag.
 
 ```
 $ bin/rubocop -a
@@ -2052,9 +2140,9 @@ $ bin/rubocop -a
 Security
 --------
 
-Rails includes the Brakeman gem out of the box. It can be used for checking security issues with your application.
+Rails includes the Brakeman gem for checking security issues with your application.
 
-If we run `bin/brakeman`, we'll see any security warnings it detects.
+Run `bin/brakeman` and it will analyze your application and output a report.
 
 ```bash
 $ bin/brakeman
@@ -2087,7 +2175,7 @@ When we push our code to a GitHub repository with GitHub Actions enabled, it wil
 Deploying to Production
 -----------------------
 
-Rails comes with a zero-downtime deployment tool called Kamal that we can use to deploy our  application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
+Rails comes with a zero-downtime deployment tool called [Kamal](https://kamal-deploy.org) that we can use to deploy our  application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
 
 Rails comes with a production-ready Dockerfile that Kamal will use to build the image. The Dockerfile uses [Thruster](https://github.com/basecamp/thruster) to compress and serve assets efficiently in production.
 
@@ -2099,7 +2187,7 @@ To deploy with Kamal, we need:
 - A [Docker Hub](https://hub.docker.com) account and access token.
   Docker Hub stores the image of the application so it can be downloaded and run on the server.
 
-On Docker Hub, we need to [create a Repository](https://hub.docker.com/repository/create) to store our application image. Use "store" as the name for the repository.
+On Docker Hub, [create a Repository](https://hub.docker.com/repository/create) for your application image. Use "store" as the name for the repository.
 
 Open `config/deploy.yml` and replace `192.168.0.1` with your server's IP address and `your-user` with your Docker Hub username.
 
@@ -2130,12 +2218,12 @@ proxy:
   host: app.example.com
 ```
 
-Kamal will looks for an environment variable for the Docker Hub access token. Sign into Docker Hub and [create an access token](https://app.docker.com/settings/personal-access-tokens/create) with Read & Write permissions.
+[Create an access token](https://app.docker.com/settings/personal-access-tokens/create) with Read & Write permissions on Docker's website so Kamal can push the Docker image for your application.
 
-We can export it in the terminal so Kamal can find it.
+Then export the access token in the terminal so Kamal can find it.
 
 ```bash
-export KAMAL_REGISTRY_PASSWORD=your-token
+export KAMAL_REGISTRY_PASSWORD=your-access-token
 ```
 
 Run the following command to set up your server and deploy your application for the first time.
@@ -2143,6 +2231,8 @@ Run the following command to set up your server and deploy your application for 
 ```bash
 $ bin/kamal setup
 ```
+
+Congratulations! You've deployed your Rails application to production.
 
 To see your Rails app in production, enter your server's IP address in your browser.
 
@@ -2154,7 +2244,9 @@ $ bin/kamal deploy
 
 ### Adding a User to Production
 
-Our production database needs a User so we can create and edit products. We'll use Kamal to open a Rails console so we can create a User in our production database.
+To create and edit products in production, we need a User record in the production database.
+
+You can use Kamal to open a production Rails console.
 
 ```bash
 $ bin/kamal console
@@ -2164,9 +2256,11 @@ $ bin/kamal console
 store(prod)> User.create!(email_address: "you@example.org", password: "s3cr3t", password_confirmation: "s3cr3t")
 ```
 
+Now you can log in to production with this email and password and manage products.
+
 ### Background jobs using Solid Queue
 
-In development, Rails will use the `:async` queue adapter to process background jobs with ActiveJob. Async stores pending jobs in memory which works great for development but it will lose pending jobs on restart.
+In development, Rails uses the `:async` queue adapter to process background jobs with ActiveJob. Async stores pending jobs in memory but it will lose pending jobs on restart. This is great for development, but not production.
 
 To make background jobs more robust, Rails uses `solid_queue` for production environments. Solid Queue stores jobs in the database and executes them in a separate process.
 
