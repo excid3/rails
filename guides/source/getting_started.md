@@ -109,14 +109,16 @@ Let's take a quick glance at the files and directories that are included in a ne
 |Rakefile|This file locates and loads tasks that can be run from the command line. The task definitions are defined throughout the components of Rails. Rather than changing `Rakefile`, you should add your own tasks by adding files to the `lib/tasks` directory of your application.|
 |README.md|This is a brief instruction manual for your application. You should edit this file to tell others what your application does, how to set it up, and so on.|
 |script/|Contains one-off or general purpose [scripts](https://github.com/rails/rails/blob/main/railties/lib/rails/generators/rails/script/USAGE) and [benchmarks](https://github.com/rails/rails/blob/main/railties/lib/rails/generators/rails/benchmark/USAGE).|
-|storage/|Active Storage files for Disk Service. This is covered in [Active Storage Overview](active_storage_overview.html).|
+|storage/|Conatins SQLite databases and Active Storage files for Disk Service. This is covered in [Active Storage Overview](active_storage_overview.html).|
 |test/|Unit tests, fixtures, and other test apparatus. These are covered in [Testing Rails Applications](testing.html).|
 |tmp/|Temporary files (like cache and pid files).|
 |vendor/|A place for all third-party code. In a typical Rails application this includes vendored gems.|
 |.dockerignore|This file tells Docker which files it should not copy into the container.|
-|.gitattributes|This file defines metadata for specific paths in a git repository. This metadata can be used by git and other tools to enhance their behavior. See the [gitattributes documentation](https://git-scm.com/docs/gitattributes) for more information.|
+|.gitattributes|This file defines metadata for specific paths in a Git repository. This metadata can be used by Git and other tools to enhance their behavior. See the [gitattributes documentation](https://git-scm.com/docs/gitattributes) for more information.|
+|.git/|Contains Git repository files.|
 |.github/|Contains GitHub specific files.|
-|.gitignore|This file tells git which files (or patterns) it should ignore. See [GitHub - Ignoring files](https://help.github.com/articles/ignoring-files) for more information about ignoring files.|
+|.gitignore|This file tells Git which files (or patterns) it should ignore. See [GitHub - Ignoring files](https://help.github.com/articles/ignoring-files) for more information about ignoring files.|
+|.kamal/|Contains Kamal secrets and deployment hooks.|
 |.rubocop.yml|This file contains the configuration for RuboCop.|
 |.ruby-version|This file contains the default Ruby version.|
 
