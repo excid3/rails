@@ -35,12 +35,12 @@ Rails is opinionated software. It makes the assumption that there is a "best" wa
 The Rails philosophy includes two major guiding principles:
 
 - **Don't Repeat Yourself:** DRY is a principle of software development which states that "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system". By not writing the same information over and over again, our code is more maintainable, more extensible, and less buggy.
-- **Convention Over Configuration:** Rails has opinions about the best way to do many things in a web application, and defaults to this set of conventions, rather than require that you specify minutiae through endless configuration files.
+- **Convention Over Configuration:** Rails has opinions about the best way to do many things in a web application, and defaults to this set of conventions, rather than require that you define them yourself through endless configuration files.
 
 Creating a new Rails app
 ------------------------
 
-We're going to build a project called `store` that will be a simple e-commerce example app that showcases several powerful features that Rails includes out of the box.
+We're going to build a project called `store` that will be a simple e-commerce example app that showcases several powerful features that Rails includes as standard.
 
 ### Prerequisites
 
@@ -124,7 +124,7 @@ Let's take a quick glance at the files and directories that are included in a ne
 
 ### Model-View-Controller Basics
 
-Rails code is organized using the Model-View-Controller (MVC) architecture. With MVC, we have 3 main concepts where the majority of our code lives:
+Rails code is organized using the Model-View-Controller (MVC) architecture. With MVC, we have three main concepts where the majority of our code lives:
 
 * Model - Manages the data in your application. Typically, your database tables.
 * View - Handles rendering responses in different formats like HTML, JSON, XML, etc.
@@ -191,16 +191,18 @@ $ bin/rails generate model Product name:string
       create      test/fixtures/products.yml
 ```
 
-This command does several things:
-1. It creates a migration in the `db/migrate` folder
-2. It creates a Active Record model in `app/models/product.rb`
-3. Generates tests and test fixtures for this model
+This command does several things. It...
+
+1. creates a migration in the `db/migrate` folder
+2. creates a Active Record model in `app/models/product.rb`
+3. generates tests and test fixtures for this model
+
 
 ### Database Migrations
 
 A _migration_ is set of changes we want to make to our database.
 
-By defining migrations, we're telling Rails how to change the database to add, change, or remove tables, columns or other attributes of our database. This helps keep track of changes we make in development so they can be deployed to production safely.
+By defining migrations, we're telling Rails how to change the database to add, change, or remove tables, columns or other attributes of our database. This helps keep track of changes we make in development (only on our computer) so they can be deployed to production (live, online!) safely.
 
 Opening the migration Rails created for us, we can see what the migration does.
 
@@ -220,7 +222,7 @@ Rails looks for a `change` method and executes it when running the migration. Th
 
 `t.string :name` tells Rails to create a column in the products table called `name` and set the type as `string`.
 
-`t.timestamps` is a shortcut for defining two columns your models: `created_at:datetime` and `updated_at:datetime`. You'll see these columns on most Active Record models in Rails and they are automatically set by Active Record when creating or updating records.
+`t.timestamps` is a shortcut for defining two columns on your models: `created_at:datetime` and `updated_at:datetime`. You'll see these columns on most Active Record models in Rails and they are automatically set by Active Record when creating or updating records.
 
 ### Running Migrations
 
@@ -229,7 +231,7 @@ To run migrations in Rails, you can run the following command:
 ```bash
 $ bin/rails db:migrate
 ```
-This command checks for any new migrations and applies them to your database. It's output looks like this:
+This command checks for any new migrations and applies them to your database. Its output looks like this:
 
 ```bash
 == 20240426151900 CreateProducts: migrating ===================================
@@ -370,7 +372,7 @@ store(dev)> Product.all
 
 This generates a `SELECT` SQL query to load all records from the `products` table. Each record is automatically converted into an instance of our Product Active Record model so we can easily work with them from Ruby.
 
-This returns an `ActiveRecord::Relation` object. A `Relation` is similar to a normal Array in Ruby, but understands that it's working with a database. This makes it easy to filter, sort, and any other operations your database supports while behaving similar to an Array.
+The `all` method returns an `ActiveRecord::Relation` object. A `Relation` is similar to a normal array in Ruby, but understands that it's working with a database. This makes it easy to filter, sort, and any other operations your database supports while behaving similar to an array.
 
 ### Filtering & Ordering Records
 
@@ -557,7 +559,7 @@ This route tells Rails to look for GET requests to the `/products` path. When Ra
 
 In this example, we specified `"products#index"` for where to route the request. This translates to a class named `ProductsController` and the `index` action inside of it. This will be responsible for handling the request and returning a response to the browser.
 
-You'll notice that we don't need to specify the protocol, domain, or query params in our routes. That's basically the protocol and domain are for making sure the request reaches your server. From there, Rails picks up the request and knows to use the path for responding to the request. The query params are like options that Rails can use to apply to the request, so they are typically used in the controller for
+You'll notice that we don't need to specify the protocol, domain, or query params in our routes. That's basically because the protocol and domain are for making sure the request reaches your server. From there, Rails picks up the request and knows to use the path for responding to the request. The query params are like options that Rails can use to apply to the request, so they are typically used in the controller for filtering the data.
 
 Let's look at another example. Add this line after the previous route:
 
@@ -573,7 +575,7 @@ Routes may also need to dynamically match requests. So how does that work?
 get "/products/:id", to: "products#show"
 ```
 
-This route has `:id` in it. This is called a `parameter` and it captures a portion of the URL to be used later for processing the request. If a user visits `/products/1/edit`, the `:id` param is set to `1` and can be used in the controller action for looking up the Product record with ID of 1.
+This route has `:id` in it. This is called a `parameter` and it captures a portion of the URL to be used later for processing the request. If a user visits `/products/1`, the `:id` param is set to `1` and can be used in the controller action for looking up the Product record with ID of 1.
 
 Route parameters don't have to be Integers either. For example, you could have a blog with articles and match `/blog/hello-world` with the following route:
 
@@ -866,7 +868,7 @@ class ProductsController < ApplicationController
 end
 ```
 
-The `new` action instantiates a new Product in memory which we will use for rendering the form.
+The `new` action instantiates a new `Product` in memory which we will use for rendering the form.
 
 We can update `app/views/products/index.html.erb` to link to the new action.
 
@@ -884,7 +886,7 @@ We can update `app/views/products/index.html.erb` to link to the new action.
 </div>
 ```
 
-Let's create `app/views/products/new.html.erb` to render the form for this new Product.
+Let's create `app/views/products/new.html.erb` to render the form for this new `Product`.
 
 ```erb
 <h1>New product</h1>
@@ -917,7 +919,7 @@ In this view, we are using the Rails `form_with` helper to generate an HTML form
 </form>
 ```
 
-Since we passed in a new Product, the form builder generated a form that will send a `POST` request to `/products` to create a new one.
+Since we passed in a new `Product`, the form builder generated a form that will send a `POST` request to `/products` to create a new one.
 
 To handle this, we need to implement the `create` action in our controller.
 
@@ -954,17 +956,17 @@ end
 
 #### Strong Parameters
 
-The `create` action handles the data submitted by the form, but it needs to be filtered for security. That's where `product_params` comes into play.
+The `create` action handles the data submitted by the form, but it needs to be filtered for security. That's where the `product_params` method comes into play.
 
 In `product_params`, we tell Rails to inspect the params and ensure there is a key named `:product` with an array of parameters as the value. The only permitted parameters for products is `:name` and Rails will ignore any other parameters. This protects our application from malicious users who might try to hack our application.
 
 #### Handling errors
 
-After assigning these params to the new Product in memory, we can try to save it to the database. `@product.save` tells Active Record to run validations and save the record to the database.
+After assigning these params to the new `Product` in memory, we can try to save it to the database. `@product.save` tells Active Record to run validations and save the record to the database.
 
-If this is successful, we want to redirect to the new product. The `redirect_to` method takes either a path/URL or can generate a path from an Active Record object. Here we supply `@product` which it sees is a Product object and finds the `products#show` route and inserts the ID to produce `"/products/2"`.
+If this is successful, we want to redirect to the new product. The `redirect_to` method takes either a path/URL or can generate a path from an Active Record object. Here we supply `@product` which it sees is a `Product` object and finds the `products#show` route and inserts the ID to produce `"/products/2"`.
 
-When the save is unsuccessful and the record wasn't valid, we want to re-render the form so the user can fix the invalid data. In the `else` clause, we tell Rails to `render :new`. Rails knows we're in the `Products` controller, so it should render `app/views/products/new.html.erb`. Since we've set the `@product` variable in `create`, we can render that template and the form will be populated with our Product data even though it wasn't able to be saved in the database.
+When the save is unsuccessful and the record wasn't valid, we want to re-render the form so the user can fix the invalid data. In the `else` clause, we tell Rails to `render :new`. Rails knows we're in the `Products` controller, so it should render `app/views/products/new.html.erb`. Since we've set the `@product` variable in `create`, we can render that template and the form will be populated with our `Product` data even though it wasn't able to be saved in the database.
 
 We also set the HTTP status to 422 Unprocessable Entity to tell the browser this POST request failed and to handle it accordingly.
 
@@ -1084,11 +1086,11 @@ end
 
 #### Extracting Partials
 
-We've already written a form for creating new products. Wouldn't it be nice if we could reuse that for edit and update? We can using a feature called "partials" that allow you to reuse a view in multiple places.
+We've already written a form for creating new products. Wouldn't it be nice if we could reuse that for edit and update? We can, using a feature called "partials" that allows you to reuse a view in multiple places.
 
-We can move the form into a file called `app/views/products/_form.html.erb`. The filename starts with an underscore denotes this is a partial.
+We can move the form into a file called `app/views/products/_form.html.erb`. The filename starts with an underscore to denote this is a partial.
 
-We also want to replace any instance variables with a local variable. We'll replace `@product` with `product`.
+We also want to replace any instance variables with a local variable, which we can define when we render the partial. We'll replace `@product` with `product`.
 
 ```erb
 <%= form_with model: product do |form| %>
@@ -1248,7 +1250,7 @@ This will display a Log out button only if the user is authenticated. When click
 
 ### Allowing Unauthenticated Access
 
-However, our store's product index and show pages should be accessible to everyone. By default, theRails authentication generator will restrict all pages to authenticated users only.
+However, our store's product index and show pages should be accessible to everyone. By default, the Rails authentication generator will restrict all pages to authenticated users only.
 
 To allow guests to view products, we can allow unauthenticated access in our controller.
 
@@ -1389,7 +1391,7 @@ Learn more in the [Asset Pipeline](asset_pipeline.html) and [Working with JavaSc
 Rich text fields with Action Text
 --------------------------------
 
-Many applications need rich text with embeds and Rails provides this functionailty out of the box with Action Text.
+Many applications need rich text with embeds (i.e. multimedia elements) and Rails provides this functionailty out of the box with Action Text.
 
 To use Action Text, you'll first run the installer:
 
@@ -1868,7 +1870,7 @@ class Product < ApplicationRecord
   after_update_commit :notify_subscribers, if: :back_in_stock?
 
   def back_in_stock?
-    inventory_count_previously_was == 0 && inventory_count > 0
+    inventory_count_previously_was.zero? && inventory_count > 0
   end
 
   def notify_subscribers
@@ -2014,7 +2016,7 @@ tshirt:
   inventory_count: 15
 ```
 
-For subscribers, we can add 2 fixtures.
+For subscribers, we can add two fixtures.
 
 ```yaml
 # test/fixtures/subscribers.yml
@@ -2060,7 +2062,7 @@ First, we include the Action Mailer test helpers so we can monitor emails sent d
 
 The `tshirt` fixture is loaded using the `products()` fixture helper and returns the Active Record object for that record. Each fixture generates a helper in the test suite to make it easy to reference fixtures by name since their database IDs may be different each run.
 
-Then we ensure the tshirt as out of stock by updating it's inventory to 0.
+Then we ensure the tshirt is out of stock by updating it's inventory to 0.
 
 Next, we use `assert_emails` to ensure 2 emails were generated by the code inside the block. To trigger the emails, we update the product's inventory count inside the block. This triggers the `notify_subscribers` callback in the Product model to send emails. Once that's done executing, `assert_emails` counts the emails and ensures it matches the expected count.
 
@@ -2133,7 +2135,7 @@ Inspecting 53 files
 
 This will print out any offenses and tell you what they are.
 
-Rubocop can autocorrect fix offsenses using the `-a` flag.
+Rubocop can automatically fix offsenses using the `--autocorrect` flag (or its short version `-a`).
 
 ```
 $ bin/rubocop -a
