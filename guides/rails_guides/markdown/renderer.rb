@@ -5,6 +5,19 @@ require "rouge"
 # Add more common shell commands
 Rouge::Lexers::Shell::BUILTINS << "|bin/rails|brew|bundle|gem|git|node|rails|rake|ruby|sqlite3|yarn"
 
+# Add support for Rails 7.2+ console prompts like "store(dev)>"
+Rouge::Lexers::IRBLexer.class_eval do
+  def prompt_regex
+    %r(
+      ^.*?
+      (
+        (irb|pry|\w+\(\w+\)).*?[>"*] |
+        [>"*]>
+      )
+    )x
+  end
+end
+
 module RailsGuides
   class Markdown
     class Renderer < Redcarpet::Render::HTML  # :nodoc:
