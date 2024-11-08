@@ -5,8 +5,10 @@ require "rouge"
 # Add more common shell commands
 Rouge::Lexers::Shell::BUILTINS << "|bin/rails|brew|bundle|gem|git|node|rails|rake|ruby|sqlite3|yarn"
 
-# Add support for Rails 7.2+ console prompts like "store(dev)>"
-Rouge::Lexers::IRBLexer.class_eval do
+# Register an IRB lexer for Rails 7.2+ console prompts like "store(dev)>"
+class Rouge::Lexers::GuidesIRBLexer < Rouge::Lexers::IRBLexer
+  tag "irb"
+
   def prompt_regex
     %r(
       ^.*?
