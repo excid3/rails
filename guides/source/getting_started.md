@@ -137,6 +137,7 @@ Puma starting in single mode...
 *          PID: 12345
 * Listening on http://127.0.0.1:3000
 * Listening on http://[::1]:3000
+Use Ctrl-C to stop
 ```
 
 This will start up a web server called Puma that will serve static files and your Rails application.
@@ -153,7 +154,7 @@ To stop the Rails server anytime, press `Ctrl-C` in your terminal.
 
 ### Automatic Reloading in Development
 
-Developer happiness is a cornerstone philosphy of Rails and one way of achieving that is with automatic code reloading in development.
+Developer happiness is a cornerstone philosophy of Rails and one way of achieving that is with automatic code reloading in development.
 
 Once you start the Rails server, new files or changes to existing files are detected and automatically loaded or reloaded as necessary. This allows you to focus on building without having to restart your Rails server after every change.
 
@@ -206,9 +207,9 @@ class CreateProducts < ActiveRecord::Migration[8.0]
 end
 ```
 
-Rails looks for a `change` method and executes it when running the migration. This migration is telling rails to create a new database table named `products`. The block then defines which columns and types should be defined in this database table.
+Rails looks for a `change` method and executes it when running the migration. This migration is telling Rails to create a new database table named `products`. The block then defines which columns and types should be defined in this database table.
 
-`t.string :name` tells Rails to create a column in the products table called `name` and set the type as `string`.
+`t.string :name` tells Rails to create a column in the `products` table called `name` and set the type as `string`.
 
 `t.timestamps` is a shortcut for defining two columns on your models: `created_at:datetime` and `updated_at:datetime`. You'll see these columns on most Active Record models in Rails and they are automatically set by Active Record when creating or updating records.
 
@@ -262,14 +263,16 @@ To exit the Rails console, type `exit` and hit Enter.
 Active Record Model Basics
 -------------------------
 
-When we ran the Rails model generator to create the Product model, it created a file at `app/models/product.rb`. This file creates a class that uses Active Record for interacting with our `products` database table.
+When we ran the Rails model generator to create the `Product` model, it created a file at `app/models/product.rb`. This file creates a class that uses Active Record for interacting with our `products` database table.
 
 ```ruby
 class Product < ApplicationRecord
 end
 ```
 
-You might be surprised that there is no code in this class. How does Rails know columns are in our database?
+You might be surprised that there is no code in this class. How does Rails know what columns are in our database?
+
+When the `Product` model is used, Rails will query the database table for the column names and types and automatically generate code for these attributes. Rails saves us from writing this boilerplate code and instead takes care of it for us behind the scenes so we can focus on our application logic instead.
 
 Let's re-open the Rails console and see what columns Rails detects for the Product model.
 
@@ -277,8 +280,6 @@ Let's re-open the Rails console and see what columns Rails detects for the Produ
 store(dev)> Product.column_names
 => ["id", "name", "created_at", "updated_at"]
 ```
-
-When the Product model is used, Rails will query the database table for the column names and types and automatically generate code for these attributes. Rails saves us from writing this boilerplate code and instead takes care of it for us behind the scenes so we can focus on our application logic instead.
 
 ### Creating Records
 
@@ -300,7 +301,7 @@ The `product` variable is an instance of `Product` but only lives in memory. It 
 We can call `save` to write the record to the database.
 
 ```irb
-store(dev)> product.save
+irb> product.save
   TRANSACTION (0.2ms)  begin transaction
   Product Create (5.2ms)  INSERT INTO "products" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"  [["name", "T-Shirt"], ["created_at", "2024-04-26 15:47:11.466589"], ["updated_at", "2024-04-26 15:47:11.466589"]]
   TRANSACTION (0.7ms)  commit transaction
@@ -723,6 +724,8 @@ Now refresh http://localhost:3000/ in your browser and you'll see that the outpu
 
 The `debug` helper prints out variables in YAML format to help with debugging. For example, if you weren't paying attention and typed singular `@product` instead of plural `@products`, the debug helper could help you identify that the variable was not set correctly in the controller.
 
+TIP: Check out the [Action View Helpers guide](action_view_helpers.html) to see more helpers that are available.
+
 Let's update `app/views/products/index.html.erb` to render all of our product names.
 
 ```erb
@@ -1102,7 +1105,7 @@ To use this partial in our new view, we can replace the form with a render call:
 <%= link_to "Cancel", products_path %>
 ```
 
-The edit view becomes almost the exact same thing thanks to the form partial.
+The edit view becomes almost the exact same thing thanks to the form partial. Let's create `app/views/products/edit.html.erb` with the following:
 
 ```erb
 <h1>Edit product</h1>
@@ -1113,7 +1116,9 @@ The edit view becomes almost the exact same thing thanks to the form partial.
 
 ### Deleting Products
 
-The last feature we need to implement is deleting products. We will add a `destroy` action to our `ProductsController` to handle `DELETE /products/:id` requests:
+The last feature we need to implement is deleting products. We will add a `destroy` action to our `ProductsController` to handle `DELETE /products/:id` requests.
+
+Adding `destroy` to `before_action :set_product` let's us set the `@product` instance variable in the same way we do for the other actions.
 
 ```ruby
 class ProductsController < ApplicationController
@@ -1215,7 +1220,7 @@ If you enter the correct username and password, it will allow you through. Your 
 
 ### Adding Log Out
 
-To log out of the application, we can add a button to the top of `app/views/layouts/application.html.erb` to show it on every page.
+To log out of the application, we can add a button to the top of `app/views/layouts/application.html.erb`. This layout is where you put HTML that you want to include in every page like a header or footer.
 
 Add a small `<nav>` section inside the `<body>` with a link to Home and a Log out button.
 
@@ -1346,9 +1351,9 @@ img {
 
 Refresh your page and you'll see the CSS has been applied.
 
-### Importmaps
+### Import maps
 
-Rails uses Importmaps for JavaScript by default. This allows you to write modern JavaScript modules with no build steps.
+Rails uses import maps for JavaScript by default. This allows you to write modern JavaScript modules with no build steps.
 
 You can find the JavaScript pins in `config/importmap.rb`
 
