@@ -48,7 +48,7 @@ For this project, you will need:
 * Ruby 3.2 or newer
 * Rails 8.0.0 or newer
 
-Follow the [Installing Ruby on Rails Guide](installing_ruby_on_rails.html) if you need to install Ruby on Rails.
+Follow the [Install Ruby on Rails Guide](install_ruby_on_rails.html) if you need to install Ruby on Rails.
 
 Let's verify that Rails is installed correctly. Open a command line prompt and run the following. You should see a version number printed out:
 

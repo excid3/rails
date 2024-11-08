@@ -1,6 +1,6 @@
 **DO NOT READ THIS FILE ON GITHUB, GUIDES ARE PUBLISHED ON https://guides.rubyonrails.org.**
 
-Installing Ruby on Rails Guide
+Install Ruby on Rails Guide
 =====================
 
 This guide will walk you through installing the Ruby programming language and the Rails framework on your operating system.
@@ -13,13 +13,13 @@ While your OS might come with Ruby pre-installed, it's often outdated and can't 
 
 Follow the section for the operating system you use:
 
-* [macOS](#installing-ruby-on-macos)
-* [Ubuntu](#installing-ruby-on-ubuntu)
-* [Windows](#installing-ruby-on-windows)
+* [macOS](#install-ruby-on-macos)
+* [Ubuntu](#install-ruby-on-ubuntu)
+* [Windows](#install-ruby-on-windows)
 
 NOTE: Any commands prefaced with a dollar sign `$` should be run in the command line.
 
-### Installing Ruby on macOS
+### Install Ruby on macOS
 
 You'll need macOS Catalina 10.15 or newer to follow these instructions.
 
@@ -46,7 +46,7 @@ $ source ~/.zshrc
 $ mise use -g ruby@3
 ```
 
-### Installing Ruby on Ubuntu
+### Install Ruby on Ubuntu
 
 You'll need Ubuntu Jammy 22.04 or newer to follow these instructions.
 
@@ -66,7 +66,7 @@ $ source ~/.bashrc
 $ mise use -g ruby@3
 ```
 
-### Installing Ruby on Windows
+### Install Ruby on Windows
 
 The Windows Subsystem for Linux will provide the best experience for Ruby on Rails development on Windows. It runs Ubuntu inside of Windows which allows you to work in an environment that is close to what your servers will run in production.
 
@@ -118,8 +118,6 @@ Run the following to install the latest Rails and make it available in your term
 ```bash
 $ gem install rails
 ```
-
-TIP: You can also run this command to upgrade to the latest version of Rails.
 
 To verify that Rails is installed correctly, run the following and you should see a version number printed out:
 
