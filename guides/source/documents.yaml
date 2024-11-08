@@ -6,9 +6,9 @@
       url: getting_started.html
       description: Everything you need to know to install Rails and create your first application.
     -
-      name: Installing Ruby
-      url: installing_ruby.html
-      description: Learn how to install the Ruby programming language to get started with Ruby on Rails.
+      name: Installing Ruby on Rails
+      url: installing_ruby_on_rails.html
+      description: Learn how to install the Ruby programming language and Ruby on Rails.
 -
   name: Models
   documents:

@@ -7,8 +7,7 @@ This guide covers getting up and running with Ruby on Rails.
 
 After reading this guide, you will know:
 
-* How to install Rails, create a new Rails application, and connect your
-  application to a database.
+* How to install Rails, create a new Rails application, and connect your application to a database.
 * The general layout of a Rails application.
 * The basic principles of MVC (Model, View, Controller) and RESTful design.
 * How to quickly generate the starting pieces of a Rails application.
@@ -44,28 +43,14 @@ We're going to build a project called `store` that will be a simple e-commerce e
 
 ### Prerequisites
 
-The only requirement to use Rails is having a recent version of Ruby installed.
+For this project, you will need:
 
 * Ruby 3.2 or newer
+* Rails 8.0.0 or newer
 
-Open a command line prompt and verify that you have Ruby installed:
+Follow the [Installing Ruby on Rails Guide](installing_ruby_on_rails.html) if you need to install Ruby on Rails.
 
-```bash
-$ ruby --version
-ruby 3.3.5
-```
-
-If you don't have Ruby installed, follow the [Installing Ruby Guide](installing_ruby.html).
-
-### Installing Rails
-
-Use Ruby's `gem` command to install the latest version of Rails. This will download Rails from Rubygems.org and make it available in your shell.
-
-```bash
-$ gem install rails
-```
-
-To verify that Rails is installed correctly, run the following and you should see a version number printed out:
+Let's verify that Rails is installed correctly. Open a command line prompt and run the following. You should see a version number printed out:
 
 ```bash
 $ rails --version
@@ -99,10 +84,10 @@ Let's take a quick glance at the files and directories that are included in a ne
 |app/|Contains the controllers, models, views, helpers, mailers, jobs, and assets for your application. You'll focus on this folder for the remainder of this guide.|
 |bin/|Contains the `rails` script that starts your app and can contain other scripts you use to set up, update, deploy, or run your application.|
 |config/|Contains configuration for your application's routes, database, and more. This is covered in more detail in [Configuring Rails Applications](configuring.html).|
-|config.ru|Rack configuration for Rack-based servers used to start the application. For more information about Rack, see the [Rack website](https://rack.github.io/).|
+|config.ru|[Rack](https://rack.github.io) configuration for Rack-based servers used to start the application.|
 |db/|Contains your current database schema, as well as the database migrations.|
 |Dockerfile|Configuration file for Docker.|
-|Gemfile<br>Gemfile.lock|These files allow you to specify what gem dependencies are needed for your Rails application. These files are used by the Bundler gem. For more information about Bundler, see the [Bundler website](https://bundler.io).|
+|Gemfile<br>Gemfile.lock|These files allow you to specify what gem dependencies are needed for your Rails application. These files are used by the [Bundler](https://bundler.io) gem.|
 |lib/|Extended modules for your application.|
 |log/|Application log files.|
 |public/|Contains static files and compiled assets. When your app is running, this directory will be exposed as-is.|
@@ -179,6 +164,8 @@ See [Autoloading and Reloading Constants](autoloading_and_reloading_constants.ht
 Creating a Database Model
 -------------------------
 
+Active Record is a feature of Rails that maps relational databases to Ruby code. It helps generate the structured query language (SQL) for interacting with the database like creating, updating, and deleteing tables and records. Our application is using SQLite which is the default for Rails.
+
 Let's start by adding a database table to our Rails application to add products to our simple e-commerce store.
 
 ```bash
@@ -191,12 +178,13 @@ $ bin/rails generate model Product name:string
       create      test/fixtures/products.yml
 ```
 
-This command does several things. It...
+This command does several things. It creates...
 
-1. creates a migration in the `db/migrate` folder
-2. creates a Active Record model in `app/models/product.rb`
-3. generates tests and test fixtures for this model
+1. a migration in the `db/migrate` folder
+2. an Active Record model in `app/models/product.rb`
+3. tests and test fixtures for this model
 
+NOTE: Model names are *singular*, beacuse an instantiated model represents a single record in the database.
 
 ### Database Migrations
 
@@ -204,7 +192,7 @@ A _migration_ is set of changes we want to make to our database.
 
 By defining migrations, we're telling Rails how to change the database to add, change, or remove tables, columns or other attributes of our database. This helps keep track of changes we make in development (only on our computer) so they can be deployed to production (live, online!) safely.
 
-Opening the migration Rails created for us, we can see what the migration does.
+Opening the migration Rails created for us (`db/migrate/<timestamp>_create_products.rb`), we can see what the migration does.
 
 ```ruby
 class CreateProducts < ActiveRecord::Migration[8.0]

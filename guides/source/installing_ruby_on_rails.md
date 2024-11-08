@@ -1,9 +1,9 @@
 **DO NOT READ THIS FILE ON GITHUB, GUIDES ARE PUBLISHED ON https://guides.rubyonrails.org.**
 
-Installing Ruby Guide
+Installing Ruby on Rails Guide
 =====================
 
-This guide will walk you through installing the Ruby programming language on your operating system.
+This guide will walk you through installing the Ruby programming language and the Rails framework on your operating system.
 
 While your OS might come with Ruby pre-installed, it's often outdated and can't be upgraded. Using a version manager like [Mise](https://mise.jdx.dev/getting-started.html) allows you to install the latest Ruby version, use a different Ruby version for each app, and easily upgrade to new versions when they're released.
 
@@ -20,6 +20,8 @@ Follow the section for the operating system you use:
 NOTE: Any commands prefaced with a dollar sign `$` should be run in the command line.
 
 ### Installing Ruby on macOS
+
+You'll need macOS Catalina 10.15 or newer to follow these instructions.
 
 For macOS, you'll need Xcode Command Line Tools and Homebrew to install dependencies needed to compile Ruby.
 
@@ -46,7 +48,9 @@ $ mise use -g ruby@3
 
 ### Installing Ruby on Ubuntu
 
-For Ubuntu, open Terminal and run the following commands:
+You'll need Ubuntu Jammy 22.04 or newer to follow these instructions.
+
+Open Terminal and run the following commands:
 
 ```bash
 # Install dependencies with apt
@@ -64,7 +68,7 @@ $ mise use -g ruby@3
 
 ### Installing Ruby on Windows
 
-The Windows Subsystem for Linux will provide the best experience for Ruby development on Windows. It runs Ubuntu inside of Windows which allows you to work in an environment that is close to what your servers will run in production.
+The Windows Subsystem for Linux will provide the best experience for Ruby on Rails development on Windows. It runs Ubuntu inside of Windows which allows you to work in an environment that is close to what your servers will run in production.
 
 You will need Windows 11 or Windows 10 version 2004 and higher (Build 19041 and higher).
 
@@ -77,6 +81,8 @@ $ wsl --install --distribution Ubuntu-24.04
 You may need to reboot during the installation process.
 
 Once installed, you can open Ubuntu from the Start menu. Enter a username and password for your Ubuntu user when prompted.
+
+Then run the following commands:
 
 ```bash
 # Install dependencies with apt
@@ -99,7 +105,27 @@ Once Ruby is installed, you can verify it works by running:
 
 ```bash
 $ ruby --version
-ruby 3.3.5
+ruby 3.3.6
+```
+
+Installing Rails
+------------------------
+
+A "gem" in Ruby is a self-contained package of a library or Ruby program. We can use Ruby's `gem` command to install the latest version of Rails and its dependencies from [RubyGems.org](https://rubygems.org).
+
+Run the following to install the latest Rails and make it available in your terminal:
+
+```bash
+$ gem install rails
+```
+
+TIP: You can also run this command to upgrade to the latest version of Rails.
+
+To verify that Rails is installed correctly, run the following and you should see a version number printed out:
+
+```bash
+$ rails --version
+Rails 8.0.0
 ```
 
 You're ready to [Get Started with Rails](getting_started.html)!
