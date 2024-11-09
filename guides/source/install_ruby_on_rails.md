@@ -126,4 +126,6 @@ $ rails --version
 Rails 8.0.0
 ```
 
+NOTE: If the `rails` command is not found, try restarting your terminal.
+
 You're ready to [Get Started with Rails](getting_started.html)!
