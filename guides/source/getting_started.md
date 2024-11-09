@@ -289,11 +289,7 @@ We can create a new Product record in memory with the following code:
 
 ```irb
 store(dev)> product = Product.new(name: "T-Shirt")
-=> #<Product:0x000000012e616c30
-  id: nil,
-  name: "T-Shirt",
-  created_at: nil,
-  updated_at: nil>
+=> #<Product:0x000000012e616c30 id: nil, name: "T-Shirt", created_at: nil, updated_at: nil>
 ```
 
 The `product` variable is an instance of `Product` but only lives in memory. It does not have an ID, created_at, or updated_at timestamps.
@@ -301,10 +297,10 @@ The `product` variable is an instance of `Product` but only lives in memory. It 
 We can call `save` to write the record to the database.
 
 ```irb
-irb> product.save
-  TRANSACTION (0.2ms)  begin transaction
-  Product Create (5.2ms)  INSERT INTO "products" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"  [["name", "T-Shirt"], ["created_at", "2024-04-26 15:47:11.466589"], ["updated_at", "2024-04-26 15:47:11.466589"]]
-  TRANSACTION (0.7ms)  commit transaction
+store(dev)> product.save
+  TRANSACTION (0.1ms)  BEGIN immediate TRANSACTION /*application='Store'*/
+  Product Create (0.9ms)  INSERT INTO "products" ("name", "created_at", "updated_at") VALUES ('T-Shirt', '2024-11-09 16:35:01.117836', '2024-11-09 16:35:01.117836') RETURNING "id" /*application='Store'*/
+  TRANSACTION (0.9ms)  COMMIT TRANSACTION /*application='Store'*/
 => true
 ```
 
@@ -314,27 +310,17 @@ Rails also updates the object in memory with the database record `id` along with
 
 ```irb
 store(dev)> product
-=>
-#<Product:0x00000001257053e8
- id: 1,
- name: "T-Shirt",
- created_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00,
- updated_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00>
+=> #<Product:0x00000001221f6260 id: 1, name: "T-Shirt", created_at: "2024-11-09 16:35:01.117836000 +0000", updated_at: "2024-11-09 16:35:01.117836000 +0000">
 ```
 
 Similar to `save`, we can use `create` to instantiate and save an Active Record model in a single call.
 
 ```irb
 store(dev)> Product.create(name: "Pants")
-  TRANSACTION (0.0ms)  begin transaction
-  Product Create (0.5ms)  INSERT INTO "products" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"  [["name", "Pants"], ["created_at", "2024-04-26 16:07:48.686955"], ["updated_at", "2024-04-26 16:07:48.686955"]]
-  TRANSACTION (0.8ms)  commit transaction
-=>
-#<Product:0x00000001250e7d08
- id: 2,
- name: "Pants",
- created_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00,
- updated_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00>
+  TRANSACTION (0.1ms)  BEGIN immediate TRANSACTION /*application='Store'*/
+  Product Create (0.4ms)  INSERT INTO "products" ("name", "created_at", "updated_at") VALUES ('Pants', '2024-11-09 16:36:01.856751', '2024-11-09 16:36:01.856751') RETURNING "id" /*application='Store'*/
+  TRANSACTION (0.1ms)  COMMIT TRANSACTION /*application='Store'*/
+=> #<Product:0x0000000120485c80 id: 2, name: "Pants", created_at: "2024-11-09 16:36:01.856751000 +0000", updated_at: "2024-11-09 16:36:01.856751000 +0000">
 ```
 
 ### Querying Records
@@ -345,18 +331,9 @@ To find all the Product records in the database, we can use the `all` class meth
 
 ```irb
 store(dev)> Product.all
-  Product Load (0.1ms)  SELECT "products".* FROM "products" /* loading for pp */ LIMIT ?  [["LIMIT", 11]]
-=>
-[#<Product:0x0000000120a48848
-  id: 1,
-  name: "T-Shirt",
-  created_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00,
-  updated_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00>,
- #<Product:0x0000000120a48708
-  id: 2,
-  name: "Pants",
-  created_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00,
-  updated_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00>]
+  Product Load (0.1ms)  SELECT "products".* FROM "products" /* loading for pp */ LIMIT 11 /*application='Store'*/
+=> [#<Product:0x0000000121845158 id: 1, name: "T-Shirt", created_at: "2024-11-09 16:35:01.117836000 +0000", updated_at: "2024-11-09 16:35:01.117836000 +0000">,
+ #<Product:0x0000000121845018 id: 2, name: "Pants", created_at: "2024-11-09 16:36:01.856751000 +0000", updated_at: "2024-11-09 16:36:01.856751000 +0000">]
 ```
 
 This generates a `SELECT` SQL query to load all records from the `products` table. Each record is automatically converted into an instance of our Product Active Record model so we can easily work with them from Ruby.
@@ -369,13 +346,8 @@ What if we want to filter the results from our database? We can use `where` to f
 
 ```irb
 store(dev)> Product.where(name: "Pants")
-  Product Load (0.7ms)  SELECT "products".* FROM "products" WHERE "products"."name" = ? /* loading for pp */ LIMIT ?  [["name", "Pants"], ["LIMIT", 11]]
-=>
-[#<Product:0x0000000125e08d48
-  id: 2,
-  name: "Pants",
-  created_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00,
-  updated_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00>]
+  Product Load (1.5ms)  SELECT "products".* FROM "products" WHERE "products"."name" = 'Pants' /* loading for pp */ LIMIT 11 /*application='Store'*/
+=> [#<Product:0x000000012184d858 id: 2, name: "Pants", created_at: "2024-11-09 16:36:01.856751000 +0000", updated_at: "2024-11-09 16:36:01.856751000 +0000">]
 ```
 This generates a `SELECT` SQL query but also adds a `WHERE` clause to filter the records that have a `name` matching `"Pants"`. This also returns an `ActiveRecord::Relation` because multiple records may have the same name.
 
@@ -383,18 +355,9 @@ We can use `order(name: :asc)` to sort records by name in ascending alphabetical
 
 ```irb
 store(dev)> Product.order(name: :asc)
-  Product Load (0.4ms)  SELECT "products".* FROM "products" /* loading for pp */ ORDER BY "products"."name" ASC LIMIT ?  [["LIMIT", 11]]
-=>
-[#<Product:0x000000013189f3c8
-  id: 2,
-  name: "Pants",
-  created_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00,
-  updated_at: Fri, 26 Apr 2024 16:07:48.686955000 UTC +00:00>,
- #<Product:0x000000013189f008
-  id: 1,
-  name: "T-Shirt",
-  created_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00,
-  updated_at: Fri, 26 Apr 2024 16:34:57.868472000 UTC +00:00>]
+  Product Load (0.3ms)  SELECT "products".* FROM "products" /* loading for pp */ ORDER BY "products"."name" ASC LIMIT 11 /*application='Store'*/
+=> [#<Product:0x0000000120e02a88 id: 2, name: "Pants", created_at: "2024-11-09 16:36:01.856751000 +0000", updated_at: "2024-11-09 16:36:01.856751000 +0000">,
+ #<Product:0x0000000120e02948 id: 1, name: "T-Shirt", created_at: "2024-11-09 16:35:01.117836000 +0000", updated_at: "2024-11-09 16:35:01.117836000 +0000">]
 ```
 
 ### Finding Records
@@ -403,13 +366,8 @@ What if want to find one specific record? The `find` class method can be used to
 
 ```irb
 store(dev)> Product.find(1)
-  Product Load (4.3ms)  SELECT "products".* FROM "products" WHERE "products"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
-=>
-#<Product:0x0000000125e8ce40
- id: 1,
- name: "T-Shirt",
- created_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00,
- updated_at: Fri, 26 Apr 2024 15:47:11.466589000 UTC +00:00>
+  Product Load (0.2ms)  SELECT "products".* FROM "products" WHERE "products"."id" = 1 LIMIT 1 /*application='Store'*/
+=> #<Product:0x000000012054af08 id: 1, name: "T-Shirt", created_at: "2024-11-09 16:35:01.117836000 +0000", updated_at: "2024-11-09 16:35:01.117836000 +0000">
 ```
 
 This generates a `SELECT` query but specifies a `WHERE` for the `id` column matching the ID of `1` that was passed in. It also adds a `LIMIT` to only return a single record.
@@ -425,9 +383,9 @@ We can call `update` on a Product instance and pass in a Hash of new attributes 
 ```irb
 store(dev)> product = Product.find(1)
 store(dev)> product.update(name: "Shoes")
-  TRANSACTION (0.0ms)  begin transaction
-  Product Update (1.4ms)  UPDATE "products" SET "name" = ?, "updated_at" = ? WHERE "products"."id" = ?  [["name", "Shoes"], ["updated_at", "2024-04-26 16:34:42.929503"], ["id", 1]]
-  TRANSACTION (1.3ms)  commit transaction
+  TRANSACTION (0.1ms)  BEGIN immediate TRANSACTION /*application='Store'*/
+  Product Update (0.3ms)  UPDATE "products" SET "name" = 'Shoes', "updated_at" = '2024-11-09 22:38:19.638912' WHERE "products"."id" = 1 /*application='Store'*/
+  TRANSACTION (0.4ms)  COMMIT TRANSACTION /*application='Store'*/
 => true
 ```
 
@@ -436,10 +394,11 @@ Alternatively, we can assign attributes in memory and  call `save` when we're re
 ```irb
 store(dev)> product = Product.find(1)
 store(dev)> product.name = "T-Shirt"
+=> "T-Shirt"
 store(dev)> product.save
-  TRANSACTION (0.0ms)  begin transaction
-  Product Update (0.4ms)  UPDATE "products" SET "name" = ?, "updated_at" = ? WHERE "products"."id" = ?  [["name", "T-Shirt"], ["updated_at", "2024-04-26 16:34:57.868472"], ["id", 1]]
-  TRANSACTION (3.5ms)  commit transaction
+  TRANSACTION (0.1ms)  BEGIN immediate TRANSACTION /*application='Store'*/
+  Product Update (0.2ms)  UPDATE "products" SET "name" = 'T-Shirt', "updated_at" = '2024-11-09 22:39:09.693548' WHERE "products"."id" = 1 /*application='Store'*/
+  TRANSACTION (0.0ms)  COMMIT TRANSACTION /*application='Store'*/
 => true
 ```
 
@@ -450,15 +409,10 @@ The `destroy` method can be used to delete a record from the database.
 ```irb
 store(dev)> product = Product.create(name: "Jacket")
 store(dev)> product.destroy
-  TRANSACTION (0.0ms)  begin transaction
-  Product Destroy (1.5ms)  DELETE FROM "products" WHERE "products"."id" = ?  [["id", 3]]
-  TRANSACTION (0.0ms)  commit transaction
-=>
-#<Product:0x0000000122736680
- id: 3,
- name: "Jacket",
- created_at: Fri, 26 Apr 2024 16:35:43.621534000 UTC +00:00,
- updated_at: Fri, 26 Apr 2024 16:35:43.621534000 UTC +00:00>
+  TRANSACTION (0.1ms)  BEGIN immediate TRANSACTION /*application='Store'*/
+  Product Destroy (0.4ms)  DELETE FROM "products" WHERE "products"."id" = 3 /*application='Store'*/
+  TRANSACTION (0.1ms)  COMMIT TRANSACTION /*application='Store'*/
+=> #<Product:0x0000000125813d48 id: 3, name: "Jacket", created_at: "2024-11-09 22:39:38.498730000 +0000", updated_at: "2024-11-09 22:39:38.498730000 +0000">
 ```
 
 ### Validations
