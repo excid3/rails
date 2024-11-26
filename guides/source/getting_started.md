@@ -533,7 +533,7 @@ There are 4 common actions you will generally need for a resource: Create, Read,
 * Index - Shows all the records
 * New - Renders a form for creating a new record
 * Create - Processes the new form submission, handling errors and creating the record
-* Show - Renders a specific record
+* Show - Renders a specific record for viewing
 * Edit - Renders a form for updating a specific record
 * Update - Handles the edit form submission, handling errors and updating the record
 * Destroy - Handles deleting a specific record
