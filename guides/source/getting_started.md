@@ -69,7 +69,7 @@ To create our `store` application, run the following:
 $ rails new store
 ```
 
-NOTE: You can use flags to customize the application Rails generates. To see those options, run `rails new --help`.
+NOTE: You can customize the application Rails generates by using flags. To see these options, run `rails new --help`.
 
 After your new application is created, switch to its directory:
 
