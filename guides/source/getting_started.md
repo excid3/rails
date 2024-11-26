@@ -634,7 +634,7 @@ class ProductsController < ApplicationController
 end
 ```
 
-You may notice the file name is an underscored version of the Class this file defines. This pattern helps Rails to automatically load code without having to use `require`.
+NOTE: You may notice the file name `products_controller.rb` is an underscored version of the Class this file defines, ProductsController. This pattern helps Rails to automatically load code without having to use `require` like you may have seen in other languages.
 
 The public `index` method here is an Action. Even though it's an empty method, Rails will default to rendering a template with the matching name.
 
