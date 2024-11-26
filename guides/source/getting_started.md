@@ -17,7 +17,7 @@ After reading this guide, you will know:
 Introduction
 ------------
 
-Welcome to Ruby on Rails! In this guide, we'll walk through the core concepts of building web applications with Ruby on Rails. You don't need any experience with Ruby on Rails to follow along with this guide.
+Welcome to Ruby on Rails! In this guide, we'll walk through the core concepts of building web applications with Rails. You don't need any experience with Rails to follow along with this guide.
 
 Ruby on Rails is a web framework built for the Ruby programming language. Rails takes advantage of many features of Ruby so we recommend learning the basics of Ruby.
 
