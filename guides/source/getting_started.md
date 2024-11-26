@@ -1876,7 +1876,8 @@ module Product::Notifications
 end
 ```
 
-The `included` block will execute in the context of the base class when the module is included and the methods will be added as instance methods.
+When you include a module in a class, any code inside the `included` block runs as if it’s part of that class. At the same time, the methods defined in the module become regular methods you can call on objects (instances) of that class.
+
 
 The Product model can now be simplified to include the Notifications module.
 
