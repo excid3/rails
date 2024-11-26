@@ -2185,7 +2185,7 @@ $ bin/kamal setup
 
 Congratulations! Your new Rails application is live and in production!
 
-To see your Rails app in production, enter your server's IP address in your browser.
+To view your new Rails app in action, open your browser and enter your server's IP address. You should see your store up and running.
 
 After this, when you make changes to your app and want to push them to production, you can run the following:
 
