@@ -2113,7 +2113,7 @@ $ bin/rubocop -a
 Security
 --------
 
-Rails includes the Brakeman gem for checking security issues with your application.
+Rails includes the Brakeman gem for checking security issues with your application - vulnerabilities that can lead to attacks such as session hijacking, session fixation, or redirection.
 
 Run `bin/brakeman` and it will analyze your application and output a report.
 
