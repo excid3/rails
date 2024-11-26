@@ -1404,7 +1404,7 @@ File uploads with Active Storage
 
 Action Text is built upon another feature of Rails called Active Storage that makes it easy to upload files.
 
-Try editing a product and dragging an image into the rich text editor and update the record. You'll see that Rails uploads this image and renders it inside the rich text editor. Cool, right?!
+Try editing a product and dragging an image into the rich text editor, and then update the record. You'll see that Rails uploads this image and renders it inside the rich text editor. Cool, right?!
 
 We can also use Active Storage directly. Let's add a featured image to the `Product` model.
 
