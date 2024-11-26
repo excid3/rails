@@ -602,7 +602,7 @@ Controllers & Actions
 
 Now that we've defined routes for Products, let's implement the controller and actions to handle requests to these URLs.
 
-This command will generate a ProductsController with an index action. Since we've already set up routes, we can skip that part of the generator
+This command will generate a ProductsController with an index action. Since we've already set up routes, we can skip that part of the generator using a flag.
 
 ```bash
 $ bin/rails generate controller Products index --skip-routes
