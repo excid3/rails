@@ -2183,7 +2183,7 @@ Run the following command to set up your server and deploy your application for 
 $ bin/kamal setup
 ```
 
-Congratulations! You've deployed your Rails application to production.
+Congratulations! Your new Rails application is live and in production!
 
 To see your Rails app in production, enter your server's IP address in your browser.
 
