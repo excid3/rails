@@ -490,7 +490,7 @@ A `DELETE` request to a URL tells the server to delete a record.
 
 A `route` in Rails refers to a line of code that matches an HTTP Method  and a URL path. The route also tells Rails which `controller` and `action` should respond to a request that matches.
 
-To define a route in Rails, we can add the following to `config/routes.rb`
+To define a route in Rails, let's go back to your code editor and add the following route to `config/routes.rb`
 
 ```ruby
 Rails.application.routes.draw do
