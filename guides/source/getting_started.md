@@ -510,7 +510,7 @@ Let's look at another example. Add this line after the previous route:
 post "/products", to: "products#create"
 ```
 
-Here, we're telling Rails to listen to POST requests to "/products" and process those requests in the `ProductsController` with the `create` action.
+Here, we're telling Rails to listen for POST requests to the "/products" path and process those requests in the `ProductsController` using the `create` action.
 
 Routes may also need to dynamically match requests. So how does that work?
 
