@@ -83,7 +83,7 @@ Let's take a quick glance at the files and directories that are included in a ne
 
 | File/Folder | Purpose |
 | ----------- | ------- |
-|app/|Contains the controllers, models, views, helpers, mailers, jobs, and assets for your application. You'll focus on this folder for the remainder of this guide.|
+|app/|Contains the controllers, models, views, helpers, mailers, jobs, and assets for your application. **You'll focus mostly on this folder for the remainder of this guide.**|
 |bin/|Contains the `rails` script that starts your app and can contain other scripts you use to set up, update, deploy, or run your application.|
 |config/|Contains configuration for your application's routes, database, and more. This is covered in more detail in [Configuring Rails Applications](configuring.html).|
 |config.ru|[Rack](https://rack.github.io) configuration for Rack-based servers used to start the application.|
