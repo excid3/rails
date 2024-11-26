@@ -30,7 +30,8 @@ module RailsGuides
       cattr_accessor :edge, :version
 
       def block_code(code, language)
-        formatter = Rouge::Formatters::HTML.new
+        language, lines = split_language_highlights(language)
+        formatter = Rouge::Formatters::HTMLLineHighlighter.new(Rouge::Formatters::HTML.new, highlight_lines: lines)
         lexer = ::Rouge::Lexer.find_fancy(lexer_language(language))
         formatted_code = formatter.format(lexer.lex(code))
         <<~HTML
@@ -174,6 +175,14 @@ module RailsGuides
           else
             url.sub(/(?<=\.org)/, "/#{version}")
           end
+        end
+
+        # Parses "ruby#3,4" into ["ruby", [3,4]] for highlighting line numbers in code blocks
+        def split_language_highlights(language)
+          return [nil, []] unless language
+
+          language, lines = language.split("#", 2)
+          [language, lines&.split(",")&.map(&:to_i)]
         end
     end
   end
