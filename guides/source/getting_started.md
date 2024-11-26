@@ -11,7 +11,7 @@ After reading this guide, you will know:
 * The general layout of a Rails application.
 * The basic principles of MVC (Model, View, Controller) and RESTful design.
 * How to quickly generate the starting pieces of a Rails application.
-
+* How to deploy your app to production using Kamal.
 --------------------------------------------------------------------------------
 
 Introduction
