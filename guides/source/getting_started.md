@@ -1450,7 +1450,7 @@ Lastly, we want to display the featured image for our product in `app/views/prod
 
 Try uploading an image for a product and you'll see the image displayed on the show page after saving.
 
-By default, Active Storage uploads files to disk but you'll want to change this for production. Check out the [Active Storage Overview](active_storage_overview.html) for more details.
+Check out the [Active Storage Overview](active_storage_overview.html) for more details.
 
 Internationalization (I18n)
 ---------------------------
