@@ -2209,7 +2209,7 @@ store(prod)> User.create!(email_address: "you@example.org", password: "s3cr3t", 
 
 Now you can log in to production with this email and password and manage products.
 
-### Background jobs using Solid Queue
+### Background Jobs using Solid Queue
 
 In development, Rails uses the `:async` queue adapter to process background jobs with ActiveJob. Async stores pending jobs in memory but it will lose pending jobs on restart. This is great for development, but not production.
 
