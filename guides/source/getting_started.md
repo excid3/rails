@@ -1682,7 +1682,7 @@ To subscribe users to a specific product, we'll use a nested route so we know wh
 
 On the product show page, we can check if there is inventory and display the amount in stock. Otherwise, we can display an out of stock message with the subscribe form to get notified when it is back in stock.
 
-Add the following to a new partial at `app/views/products/_inventory.html.erb`.
+Create a new partial at `app/views/products/_inventory.html.erb` and add the following:
 
 ```erb
 <% if product.inventory_count? %>
