@@ -2185,7 +2185,7 @@ registry:
   username: your-user
 ```
 
-Under the `proxy:` section, you can add a domain to enable SSL for your application too. Make sure your DNS record points to the server and Kamal will use LetsEncrypt to issue an SSL certificate the domain.
+Under the `proxy:` section, you can add a domain to enable SSL for your application too. Make sure your DNS record points to the server and Kamal will use LetsEncrypt to issue an SSL certificate for the domain.
 
 ```yaml
 proxy:
