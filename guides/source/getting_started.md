@@ -1399,7 +1399,7 @@ Create a new product and add a description with bold and italic text. You'll see
 
 Check out the [Action Text Overview](action_text_overview.html) to learn more.
 
-File uploads with Active Storage
+File Uploads with Active Storage
 -------------------------------
 
 Action Text is built upon another feature of Rails called Active Storage that makes it easy to upload files.
