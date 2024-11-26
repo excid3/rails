@@ -1366,7 +1366,7 @@ class Product
 end
 ```
 
-The form can be updated to include a rich text field for editing the description in `app/views/products/_form.html.erb` before the submit button.
+The form can now be updated to include a rich text field for editing the description in `app/views/products/_form.html.erb` before the submit button.
 
 ```erb
 <%= form_with model: product do |form| %>
