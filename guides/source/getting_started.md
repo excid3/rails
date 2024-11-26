@@ -520,7 +520,14 @@ get "/products/:id", to: "products#show"
 
 This route has `:id` in it. This is called a `parameter` and it captures a portion of the URL to be used later for processing the request. If a user visits `/products/1`, the `:id` param is set to `1` and can be used in the controller action to look up and display the Product record with an ID of 1.
 
-Route parameters don't have to be Integers either. For example, you could have a blog with articles and match `/blog/hello-world` with the following route:
+Route parameters don't have to be Integers, either. 
+
+For example, you could have a blog with articles and match /blog/hello-world with the following route:
+
+get "/blog/:title", to: "blog#show"
+
+Rails will capture “hello-world” out of “/blog/hello-world” and this can be used to look up the blog post with the matching title.
+
 
 ```ruby
 get "/blog/:slug", to: "blog#show"
