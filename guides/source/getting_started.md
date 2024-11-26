@@ -1732,7 +1732,7 @@ class ProductMailer < ApplicationMailer
 end
 ```
 
-The mailer generator also generates two email templates. One for HTML and one for Text. We can update those to include a message and link to the product.
+The mailer generator also generates two email templates in our views folder: one for HTML and one for Text. We can update those to include a message and link to the product.
 
 Change `app/views/product_mailer/in_stock.html.erb` to:
 
