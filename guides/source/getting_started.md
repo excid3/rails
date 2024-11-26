@@ -2124,7 +2124,7 @@ Security Warnings: 0
 == Warning Types ==
 
 
-No warnings foundd
+No warnings found
 ```
 
 Learn more about [Securing Rails Applications](security.html)
