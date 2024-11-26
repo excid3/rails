@@ -2187,7 +2187,7 @@ Congratulations! Your new Rails application is live and in production!
 
 To see your Rails app in production, enter your server's IP address in your browser.
 
-When you're ready to deploy new changes, you can run the following:
+After this, when you make changes to your app and want to push them to production, you can run the following:
 
 ```bash
 $ bin/kamal deploy
