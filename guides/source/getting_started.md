@@ -570,6 +570,7 @@ Typing out these routes every time is redundant, so Rails provides a shortcut fo
 resources :products
 ```
 
+TIP: If you don’t want all these CRUD actions, you specify exactly what you need. Check out the [routing guide](#routing) for details.
 ### Routes Command
 
 Rails provides a command that displays all the routes your application responds to.
