@@ -1970,7 +1970,13 @@ Rails comes with a robust test suite. Let's write a test to ensure that the corr
 
 ### Fixtures
 
-Tests often rely on records in the database. Rails provides fixtures which are copied into the database and given names to easily look up records in your tests.
+When you generate a model using Rails, it automatically creates a corresponding fixture file in the `test/fixtures` directory. 
+
+Fixtures are predefined sets of data that populate your test database before running tests. They allow you to define records with easy-to-remember names, making it simple to access them in your tests.
+
+This file will be empty by default - you need to populate it with fixtures for your tests.
+
+Let’s update the product fixtures file with this data:
 
 ```yaml
 # test/fixtures/products.yml
