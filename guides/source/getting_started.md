@@ -59,7 +59,9 @@ Rails 8.0.0
 The version shown should be Rails 8.0.0 or higher.
 ### Creating Your First Rails App
 
-Rails comes with several commands to make life easier. `rails new` generates a fresh Rails application for you. You can run `rails --help` to see all of the commands.
+Rails comes with several commands to make life easier. Run `rails --help` to see all of the commands.
+
+`rails new` generates the foundation of a fresh Rails application for you, so let's start there.
 
 To create our `store` application, run the following:
 
