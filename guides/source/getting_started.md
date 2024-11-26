@@ -620,7 +620,8 @@ $ bin/rails generate controller Products index --skip-routes
 This command generates a handful of files for our controller:
 
 * The controller itself
-* A views folder for the index action we specified
+* A views folder for the controller we generated
+* A view file for the action we specified when generating the controller
 * A test file for this controller
 * A helper file for extracting logic in our views
 
