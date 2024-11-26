@@ -2238,3 +2238,6 @@ We also recommend learning more by reading other Ruby on Rails Guides:
 * [Testing Rails Applications](testing.html)
 * [Debugging Rails Applications](debugging_rails_applications.html)
 * [Securing Rails Applications](security.html)
+
+
+Happy building!
