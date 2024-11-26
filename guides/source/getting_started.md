@@ -39,7 +39,7 @@ The Rails philosophy includes two major guiding principles:
 Creating a New Rails App
 ------------------------
 
-We're going to build a project called `store` that will be a simple e-commerce example app that showcases several powerful features that Rails includes as standard.
+We're going to build a project called `store` - a simple e-commerce app that demonstrates several powerful features included in Rails as default.
 
 ### Prerequisites
 
