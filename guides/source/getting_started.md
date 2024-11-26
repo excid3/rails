@@ -36,7 +36,7 @@ The Rails philosophy includes two major guiding principles:
 - **Don't Repeat Yourself:** DRY is a principle of software development which states that "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system". By not writing the same information over and over again, our code is more maintainable, more extensible, and less buggy.
 - **Convention Over Configuration:** Rails has opinions about the best way to do many things in a web application, and defaults to this set of conventions, rather than require that you define them yourself through endless configuration files.
 
-Creating a new Rails app
+Creating a New Rails App
 ------------------------
 
 We're going to build a project called `store` that will be a simple e-commerce example app that showcases several powerful features that Rails includes as standard.
