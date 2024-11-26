@@ -2148,7 +2148,9 @@ When we push our code to a GitHub repository with GitHub Actions enabled, it wil
 Deploying to Production
 -----------------------
 
-Rails comes with a zero-downtime deployment tool called [Kamal](https://kamal-deploy.org) that we can use to deploy our  application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
+And now the fun part: let’s deploy your app.
+
+Rails comes with a deployment tool called [Kamal](https://kamal-deploy.org) that we can use to deploy our  application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
 
 Rails comes with a production-ready Dockerfile that Kamal will use to build the image. The Dockerfile uses [Thruster](https://github.com/basecamp/thruster) to compress and serve assets efficiently in production.
 
