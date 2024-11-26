@@ -1879,7 +1879,7 @@ end
 When you include a module in a class, any code inside the `included` block runs as if it’s part of that class. At the same time, the methods defined in the module become regular methods you can call on objects (instances) of that class.
 
 
-The Product model can now be simplified to include the Notifications module.
+Now that the code triggering the notification has been extracted into the Notification module, the Product model can be simplified to include the Notifications module.
 
 ```ruby
 class Product < ApplicationRecord
