@@ -1537,7 +1537,7 @@ Learn more about the [Rails Internationalization (I18n) API](i18n.html).
 Adding In Stock Notifications
 -----------------------------
 
-A common feature of e-commerce stores is an email subscription to get notified when a product is back in stock. Now that we've seen the basics of Rails, let's add this feature to our e-commerce store.
+A common feature of e-commerce stores is an email subscription to get notified when a product is back in stock. Now that we've seen the basics of Rails, let's add this feature to our store.
 
 ### Basic Inventory Tracking
 
