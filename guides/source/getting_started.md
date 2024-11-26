@@ -1851,6 +1851,8 @@ Active Record keeps track of changes to attributes so `back_in_stock?` checks th
 
 The Product model now has a decent amount of code for handling notifications. To better organize our code, we can extract this to an `ActiveSupport::Concern`. A Concern is a Ruby module with some syntactic sugar to make using them easier.
 
+First let’s create the Notifications module.
+
 Create a file at `app/models/product/notifications.rb` with the following:
 
 ```ruby
