@@ -56,7 +56,7 @@ Let's verify that Rails is installed correctly. Open a command line prompt and r
 $ rails --version
 Rails 8.0.0
 ```
-
+The version shown should be Rails 8.0.0 or higher.
 ### Creating Your First Rails App
 
 Rails comes with several commands to make life easier. `rails new` generates a fresh Rails application for you. You can run `rails --help` to see all of the commands.
