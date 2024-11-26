@@ -1985,7 +1985,7 @@ tshirt:
   inventory_count: 15
 ```
 
-For subscribers, we can add two fixtures.
+And for subscribers, let's add these two fixtures:
 
 ```yaml
 # test/fixtures/subscribers.yml
