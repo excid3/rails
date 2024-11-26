@@ -1623,7 +1623,7 @@ class Product < ApplicationRecord
 end
 ```
 
-We also need a controller to create these subscribers. Let's create that in `app/controllers/subscribers_controller.rb` with the following code:
+Now we need a controller to create these subscribers. Let's create that in `app/controllers/subscribers_controller.rb` with the following code:
 
 ```ruby
 class SubscribersController < ApplicationController
