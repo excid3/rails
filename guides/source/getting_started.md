@@ -557,7 +557,7 @@ delete "/products/:id", to: "products#destroy"
 
 #### Resource Routes
 
-Typing out these routes every time is redundant, so Rails provides a shortcut for defining them. To create the same CRUD routes, replace the above routes with this single line:
+Typing out these routes every time is redundant, so Rails provides a shortcut for defining them. To create all of the same CRUD routes, replace the above routes with this single line:
 
 ```ruby
 resources :products
