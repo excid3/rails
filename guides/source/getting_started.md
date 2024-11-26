@@ -1608,7 +1608,9 @@ Then run the new migration:
 $ bin/rails db:migrate
 ```
 
-We can add `has_many :subscribers, dependent: :destroy` to our Product model to add an association between the two models. This tells Rails how to join queries between the two database tables.
+By including `product:belongs_to` above, we told Rails that subscribers and products have a one-to-many relationship, meaning a Subscriber "belongs to" a single Product instance.
+
+A Product, however, can have many subscribers, so we then add `has_many :subscribers, dependent: :destroy` to our Product model to add the second part of this association between the two models. This tells Rails how to join queries between the two database tables.
 
 ```ruby
 class Product < ApplicationRecord
