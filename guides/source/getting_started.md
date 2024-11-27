@@ -63,7 +63,7 @@ Rails comes with several commands to make life easier. Run `rails --help` to see
 
 `rails new` generates the foundation of a fresh Rails application for you, so let's start there.
 
-To create our `store` application, run the following:
+To create our `store` application, run the following prompt in your terminal:
 
 ```bash
 $ rails new store
