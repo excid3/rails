@@ -877,7 +877,7 @@ In this view, we are using the Rails `form_with` helper to generate an HTML form
 
 Since we passed in a new `Product`, the form builder generated a form that will send a `POST` request to `/products` to create a new one.
 
-To handle this, we need to implement the `create` action in our controller.
+To handle this, we first need to implement the `create` action in our controller.
 
 ```ruby
 class ProductsController < ApplicationController
