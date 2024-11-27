@@ -717,7 +717,7 @@ We've already defined the route for individual products with our `resources :pro
 
 ### Showing Individual Products
 
-We can add the `show` action like this:
+Open the Products controller and add the `show` action like this:
 
 ```ruby
 class ProductsController < ApplicationController
