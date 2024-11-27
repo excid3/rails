@@ -156,7 +156,7 @@ To stop the Rails server anytime, press `Ctrl-C` in your terminal.
 
 ### Automatic Reloading in Development
 
-Developer happiness is a cornerstone philosophy of Rails and one way of achieving that is with automatic code reloading in development.
+Developer happiness is a cornerstone philosophy of Rails and one way of achieving this is with automatic code reloading in development.
 
 Once you start the Rails server, new files or changes to existing files are detected and automatically loaded or reloaded as necessary. This allows you to focus on building without having to restart your Rails server after every change.
 
