@@ -640,7 +640,7 @@ NOTE: You may notice the file name `products_controller.rb` is an underscored ve
 
 The `index` method here is an Action. Even though it's an empty method, Rails will default to rendering a template with the matching name.
 
-The `index` action will render `app/views/products/index.html.erb`. If we open up that file, we'll see the HTML it renders.
+The `index` action will render `app/views/products/index.html.erb`. If we open up that file in our code editor, we'll see the HTML it renders.
 
 ```erb
 <h1>Products#index</h1>
