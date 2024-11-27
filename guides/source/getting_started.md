@@ -50,7 +50,7 @@ For this project, you will need:
 
 Follow the [Install Ruby on Rails Guide](install_ruby_on_rails.html) if you need to install Ruby and/or Rails.
 
-Let's verify that Rails is installed correctly. Open a command line prompt and run the following. You should see a version number printed out:
+Let's verify the correct version of Rails is installed correctly. To display the current version, open a terminal and run the following. You should see a version number printed out:
 
 ```bash
 $ rails --version
@@ -522,7 +522,7 @@ get "/products/:id", to: "products#show"
 
 This route has `:id` in it. This is called a `parameter` and it captures a portion of the URL to be used later for processing the request. If a user visits `/products/1`, the `:id` param is set to `1` and can be used in the controller action to look up and display the Product record with an ID of 1.
 
-Route parameters don't have to be Integers, either. 
+Route parameters don't have to be Integers, either.
 
 For example, you could have a blog with articles and match /blog/hello-world with the following route:
 
@@ -1476,9 +1476,9 @@ In `app/products/index.html.erb`, let's update the header tag to use a translati
 <h1><%= t "hello" %></h1>
 ```
 
-Refreshing the page, we see `Hello world` is the header text now.
+Refreshing the page, we see `Hello world` is the header text now. Where did that come from?
 
-Since the default language is in English, Rails looks in `config/locales/en.yml` for a matching key under the locale.
+Since the default language is in English, Rails looks in `config/locales/en.yml` (which was created during `rails new`) for a matching key under the locale.
 
 ```yaml
 en:
@@ -1970,7 +1970,7 @@ Rails comes with a robust test suite. Let's write a test to ensure that the corr
 
 ### Fixtures
 
-When you generate a model using Rails, it automatically creates a corresponding fixture file in the `test/fixtures` directory. 
+When you generate a model using Rails, it automatically creates a corresponding fixture file in the `test/fixtures` directory.
 
 Fixtures are predefined sets of data that populate your test database before running tests. They allow you to define records with easy-to-remember names, making it simple to access them in your tests.
 
