@@ -124,7 +124,7 @@ Hello, Rails!
 
 Let's start easy and boot up our Rails server for the first time.
 
-In your terminal, run the following command in the `store` directory:
+Now that you are in the `store` directory, run the following command in your terminal:
 
 ```bash
 $ bin/rails server
