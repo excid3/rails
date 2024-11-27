@@ -705,7 +705,7 @@ Let's update `app/views/products/index.html.erb` to render all of our product na
 </div>
 ```
 
-Using ERB, this code will loop through each product in the `@products` `ActiveRecord::Relation` object and renders a div containing the product name.
+Using ERB, this code loops through each product in the `@products` `ActiveRecord::Relation` object and renders a div containing the product name.
 
 We've used a new ERB tag this time as well. `<% %>` evaluates the Ruby code but does not output the return value. That ignores the output of `@products.each` which would output an array that we don't want in our HTML.
 
