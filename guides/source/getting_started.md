@@ -779,7 +779,7 @@ These route prefixes give us helpers like the following:
 `_path` returns a relative path which the browser understands is for the current domain.
 `_url` returns a full URL including the protocol, host, and port.
 
-URL helpers are useful for rendering emails that will be viewed outside outside of the browser.
+URL helpers are useful for rendering emails that will be viewed outside of the browser.
 
 Combined with the `link_to` helper, we can generate anchor tags and use the URL helper to do this cleanly in Ruby. `link_to` accepts the display content for the link and the path or URL to link to for the `href` attribute.
 
