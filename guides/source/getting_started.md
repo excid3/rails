@@ -63,7 +63,7 @@ Rails comes with several commands to make life easier. Run `rails --help` to see
 
 `rails new` generates the foundation of a fresh Rails application for you, so let's start there.
 
-To create our `store` application, run the following:
+To create our `store` application, run the following prompt in your terminal:
 
 ```bash
 $ rails new store
@@ -96,7 +96,7 @@ Let's take a quick glance at the files and directories that are included in a ne
 |Rakefile|This file locates and loads tasks that can be run from the command line. The task definitions are defined throughout the components of Rails. Rather than changing `Rakefile`, you should add your own tasks by adding files to the `lib/tasks` directory of your application.|
 |README.md|This is a brief instruction manual for your application. You should edit this file to tell others what your application does, how to set it up, and so on.|
 |script/|Contains one-off or general purpose [scripts](https://github.com/rails/rails/blob/main/railties/lib/rails/generators/rails/script/USAGE) and [benchmarks](https://github.com/rails/rails/blob/main/railties/lib/rails/generators/rails/benchmark/USAGE).|
-|storage/|Conatins SQLite databases and Active Storage files for Disk Service. This is covered in [Active Storage Overview](active_storage_overview.html).|
+|storage/|Contains SQLite databases and Active Storage files for Disk Service. This is covered in [Active Storage Overview](active_storage_overview.html).|
 |test/|Unit tests, fixtures, and other test apparatus. These are covered in [Testing Rails Applications](testing.html).|
 |tmp/|Temporary files (like cache and pid files).|
 |vendor/|A place for all third-party code. In a typical Rails application this includes vendored gems.|
@@ -124,7 +124,7 @@ Hello, Rails!
 
 Let's start easy and boot up our Rails server for the first time.
 
-In your terminal, run the following command in the `store` directory:
+Now that you are in the `store` directory, run the following command in your terminal:
 
 ```bash
 $ bin/rails server
@@ -156,7 +156,7 @@ To stop the Rails server anytime, press `Ctrl-C` in your terminal.
 
 ### Automatic Reloading in Development
 
-Developer happiness is a cornerstone philosophy of Rails and one way of achieving that is with automatic code reloading in development.
+Developer happiness is a cornerstone philosophy of Rails and one way of achieving this is with automatic code reloading in development.
 
 Once you start the Rails server, new files or changes to existing files are detected and automatically loaded or reloaded as necessary. This allows you to focus on building without having to restart your Rails server after every change.
 
@@ -638,9 +638,9 @@ end
 
 NOTE: You may notice the file name `products_controller.rb` is an underscored version of the Class this file defines, ProductsController. This pattern helps Rails to automatically load code without having to use `require` like you may have seen in other languages.
 
-The public `index` method here is an Action. Even though it's an empty method, Rails will default to rendering a template with the matching name.
+The `index` method here is an Action. Even though it's an empty method, Rails will default to rendering a template with the matching name.
 
-The `index` action will render `app/views/products/index.html.erb`. If we open up that file, we'll see the HTML it renders.
+The `index` action will render `app/views/products/index.html.erb`. If we open up that file in our code editor, we'll see the HTML it renders.
 
 ```erb
 <h1>Products#index</h1>
@@ -705,7 +705,7 @@ Let's update `app/views/products/index.html.erb` to render all of our product na
 </div>
 ```
 
-Using ERB, this code will loop through each product in the `@products` `ActiveRecord::Relation` object and renders a div containing the product name.
+Using ERB, this code loops through each product in the `@products` `ActiveRecord::Relation` object and renders a div containing the product name.
 
 We've used a new ERB tag this time as well. `<% %>` evaluates the Ruby code but does not output the return value. That ignores the output of `@products.each` which would output an array that we don't want in our HTML.
 
@@ -717,7 +717,7 @@ We've already defined the route for individual products with our `resources :pro
 
 ### Showing Individual Products
 
-We can add the `show` action like this:
+Open the Products controller and add the `show` action like this:
 
 ```ruby
 class ProductsController < ApplicationController
@@ -779,7 +779,7 @@ These route prefixes give us helpers like the following:
 `_path` returns a relative path which the browser understands is for the current domain.
 `_url` returns a full URL including the protocol, host, and port.
 
-URL helpers are useful for rendering emails that will be viewed outside outside of the browser.
+URL helpers are useful for rendering emails that will be viewed outside of the browser.
 
 Combined with the `link_to` helper, we can generate anchor tags and use the URL helper to do this cleanly in Ruby. `link_to` accepts the display content for the link and the path or URL to link to for the `href` attribute.
 
@@ -877,7 +877,7 @@ In this view, we are using the Rails `form_with` helper to generate an HTML form
 
 Since we passed in a new `Product`, the form builder generated a form that will send a `POST` request to `/products` to create a new one.
 
-To handle this, we need to implement the `create` action in our controller.
+To handle this, we first need to implement the `create` action in our controller.
 
 ```ruby
 class ProductsController < ApplicationController
