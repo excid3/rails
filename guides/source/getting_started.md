@@ -989,9 +989,15 @@ In `product_params`, we tell Rails to inspect the params and ensure there is a k
 
 #### Handling errors
 
-After assigning these params to the new `Product` in memory, we can try to save it to the database. `@product.save` tells Active Record to run validations and save the record to the database.
+After assigning these params to the new `Product`, we can try to save it to the database. `@product.save` tells Active Record to run validations and save the record to the database.
 
-If this is successful, we want to redirect to the new product. The `redirect_to` method takes either a path/URL or can generate a path from an Active Record object. Here we supply `@product` which it sees is a `Product` object and finds the `products#show` route and inserts the ID to produce `"/products/2"`.
+If saving is successful, we want to redirect to the new product. When `redirect_to` is given an Active Record object, Rails generates a path for that record's show action.
+
+```ruby
+redirect_to @product
+```
+
+Since `@product` is a `Product` instance, Rails pluralizes the model name and includes the object's ID in the path to produce `"/products/2"` for the redirect.
 
 When the save is unsuccessful and the record wasn't valid, we want to re-render the form so the user can fix the invalid data. In the `else` clause, we tell Rails to `render :new`. Rails knows we're in the `Products` controller, so it should render `app/views/products/new.html.erb`. Since we've set the `@product` variable in `create`, we can render that template and the form will be populated with our `Product` data even though it wasn't able to be saved in the database.
 
@@ -1001,9 +1007,9 @@ We also set the HTTP status to 422 Unprocessable Entity to tell the browser this
 
 The process of editing records is very similar to creating records. Instead of `new` and `create` actions, we will have `edit` and `update`.
 
-Let's implement them with the following:
+Let's implement them in the controller with the following:
 
-```ruby
+```ruby#23-34
 class ProductsController < ApplicationController
   def index
     @products = Product.all
@@ -1049,7 +1055,7 @@ end
 
 Next we can add an Edit link to `app/views/products/show.html.erb`:
 
-```erb
+```erb#4
 <h1><%= @product.name %></h1>
 
 <%= link_to "Back", products_path %>
@@ -1060,11 +1066,11 @@ Next we can add an Edit link to `app/views/products/show.html.erb`:
 
 Since `edit` and `update` require an existing database record like `show` we can deduplicate this into a `before_action`.
 
-A `before_action` allows you to extract shared code between actions and run it *before* the action.
+A `before_action` allows you to extract shared code between actions and run it *before* the action. In the above controller code, `@product = Product.find(params[:id])` is defined in three different methods. Extracting this query to a before action called `set_product` cleans up our code for each action.
 
-Extracting the `Product.find` query to a before action called `set_product` cleans up our code for each action:
+This is a good example of the DRY (Don't Repeat Yourself) philosophy in action.
 
-```ruby
+```ruby#2,8-9,24-25,27-33,37-39
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update ]
 
@@ -1119,7 +1125,7 @@ We can move the form into a file called `app/views/products/_form.html.erb`. The
 
 We also want to replace any instance variables with a local variable, which we can define when we render the partial. We'll replace `@product` with `product`.
 
-```erb
+```erb#1
 <%= form_with model: product do |form| %>
   <div>
     <%= form.label :name %>
@@ -1134,7 +1140,7 @@ We also want to replace any instance variables with a local variable, which we c
 
 To use this partial in our new view, we can replace the form with a render call:
 
-```erb
+```erb#3
 <h1>New product</h1>
 
 <%= render "form", product: @product %>
@@ -1143,12 +1149,14 @@ To use this partial in our new view, we can replace the form with a render call:
 
 The edit view becomes almost the exact same thing thanks to the form partial. Let's create `app/views/products/edit.html.erb` with the following:
 
-```erb
+```erb#3
 <h1>Edit product</h1>
 
 <%= render "form", product: @product %>
 <%= link_to "Cancel", @product %>
 ```
+
+To learn more about view partials, check out the [Action View Guide](action_view_overview.html).
 
 ### Deleting Products
 
@@ -1156,7 +1164,7 @@ The last feature we need to implement is deleting products. We will add a `destr
 
 Adding `destroy` to `before_action :set_product` let's us set the `@product` instance variable in the same way we do for the other actions.
 
-```ruby
+```ruby#2,35-38
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
 
@@ -1208,26 +1216,28 @@ class ProductsController < ApplicationController
 end
 ```
 
-To make this work, we need to add a Destroy button to `app/views/products/show.html.erb`:
+To make this work, we need to add a Delete button to `app/views/products/show.html.erb`:
 
 ```erb
 <h1><%= @product.name %></h1>
 
 <%= link_to "Back", products_path %>
 <%= link_to "Edit", edit_product_path(@product) %>
-<%= button_to "Destroy", @product, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+<%= button_to "Delete", @product, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
 ```
 
-`button_to` generates a form with a single button in it with the "Destroy" text. When this button is clicked, it submits the form which makes a `DELETE` request to `/products/:id` which triggers the `destroy` action in our controller.
+`button_to` generates a form with a single button in it with the "Delete" text. When this button is clicked, it submits the form which makes a `DELETE` request to `/products/:id` which triggers the `destroy` action in our controller.
 
 The `turbo_confirm` data attribute tells the Turbo JavaScript library to ask the user to confirm before submitting the form. We'll dig more into that shortly.
 
 Adding Authentication
 ---------------------
 
-Anyone can edit or delete products which isn't safe. Let's add some security by requiring a a user to be authenticated to manage products.
+Anyone can edit or delete products which isn't safe. Let's add some security by requiring a user to be authenticated to manage products.
 
 Rails comes with an authentication generator that we can use. It creates User and Session models and the controllers and views necessary to login to our application.
+
+Head back to your terminal and run the following command:
 
 ```bash
 $ bin/rails generate authentication
@@ -1239,13 +1249,23 @@ Then migrate the database to add the User and Session tables.
 $ bin/rails db:migrate
 ```
 
-Next, we will create a User using the Rails console. Feel free to user your own email and password instead of the example.
+Open the Rails console to create a User.
+
+```bash
+$ bin/rails console
+```
+
+Use `User.create!` method to create a User in the Rails console. Feel free to use your own email and password instead of the example.
 
 ```irb
 store(dev)> User.create! email_address: "you@example.org", password: "s3cr3t", password_confirmation: "s3cr3t"
 ```
 
 Restart your Rails server so it picks up the `bcrypt` gem added by the generator. BCrypt is used for securely hashing passwords for authentication.
+
+```bash
+$ bin/rails server
+```
 
 When you visit any page, Rails will prompt for a username and password. Enter the email and password you used when creating the User record.
 
@@ -1310,7 +1330,7 @@ Optionally, you can include a link to this route in the navbar to add a Login li
 
 You can also update the Edit and Destroy links on the show view to only display if authenticated.
 
-```erb
+```erb#1,4
 <% if authenticated? %>
   <%= link_to "Edit", edit_product_path(@product) %>
   <%= button_to "Destroy", @product, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
@@ -1324,7 +1344,7 @@ Sometimes you may need to cache parts of a page for performance and Rails provid
 
 Using the `cache` method, we can store HTML in the cache. Let's cache the header in `app/views/products/show.html.erb`.
 
-```erb
+```erb#1,3
 <% cache @product do %>
   <h1><%= @product.name %></h1>
 <% end %>
@@ -1334,7 +1354,7 @@ By passing `@product` into `cache`, Rails generates a unique cache key for the p
 
 To enable caching in development, run `rails dev:cache` in your terminal.
 
-When you visit a product's show action, you'll see the new caching lines in your Rails server logs:
+When you visit a product's show action (like `/products/2`), you'll see the new caching lines in your Rails server logs:
 
 ```bash
 Read fragment views/products/show:a5a585f985894cd27c8b3d49bb81de3a/products/1-20240918154439539125 (1.6ms)
@@ -1362,7 +1382,7 @@ CSS & JavaScript are core parts of building web applications, so let's learn how
 
 ### Propshaft
 
-Rails' asset pipeline is called Propshaft. It takes your CSS, JavaScript, images, and other assets and serves them to your browser. In production, Propshaft digests your assets so they can be cached indefinitely for performance.
+Rails' asset pipeline is called Propshaft. It takes your CSS, JavaScript, images, and other assets and serves them to your browser. In production, Propshaft keeps track of each version of your assets so they can be cached to make your pages faster. Check out the [Asset Pipeline guide](asset_pipeline.html) to learn more about how this works.
 
 Let's modify `app/assets/stylesheets/application.css` and change our font to sans-serif.
 
@@ -1387,11 +1407,11 @@ img {
 
 Refresh your page and you'll see the CSS has been applied.
 
-### Import maps
+### Import Maps
 
 Rails uses import maps for JavaScript by default. This allows you to write modern JavaScript modules with no build steps.
 
-You can find the JavaScript pins in `config/importmap.rb`
+You can find the JavaScript pins in `config/importmap.rb`. This file maps the JavaScript package names with the source file which is used to generate the importmap tag in the browser.
 
 ```ruby
 # Pin npm packages by running ./bin/importmap
@@ -1403,11 +1423,11 @@ pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 ```
 
-This file maps the JavaScript package names with the source file which is used to generate the importmap tag in the browser.
+TIP: Each pin maps a JavaScript package name (e.g., `"@hotwired/turbo-rails"`) to a specific file or URL (e.g., `"turbo.min.js"`). `pin_all_from` maps all files in a directory (e.g., `app/javascript/controllers`) to a namespace (e.g., `"controllers"`).
+
+Import maps keep the setup clean and minimal, while still supporting modern JavaScript features.
 
 ### Hotwire
-
-We haven't written any JavaScript yet, but we have been using Hotwire on the frontend.
 
 Hotwire is a JavaScript framework designed to take full advantage of server-side generated HTML. It is comprised of 3 core components:
 
@@ -1415,12 +1435,14 @@ Hotwire is a JavaScript framework designed to take full advantage of server-side
 2. [**Stimulus**](https://stimulus.hotwired.dev/) provides a framework for when you need custom JavaScript to add functionality to the page.
 3. [**Native**](https://native.hotwired.dev/) allows you to make hybrid mobile apps by embedding your web app and progressively enhancing it with native mobile features.
 
+We haven't written any JavaScript yet, but we have been using Hotwire on the frontend. For instance, the form you created to add and edit a product was powered by Turbo.
+
 Learn more in the [Asset Pipeline](asset_pipeline.html) and [Working with JavaScript in Rails](working_with_javascript_in_rails.html) guides.
 
 Rich text fields with Action Text
 --------------------------------
 
-Many applications need rich text with embeds (i.e. multimedia elements) and Rails provides this functionailty out of the box with Action Text.
+Many applications need rich text with embeds (i.e. multimedia elements) and Rails provides this functionality out of the box with Action Text.
 
 To use Action Text, you'll first run the installer:
 
@@ -1431,9 +1453,11 @@ $ bin/rails db:migrate
 
 Restart your Rails server to make sure all the new features are loaded.
 
-We can add the following to the `Product` model to add a rich text field named `description`.
+Now, let's add a rich text description field to our product.
 
-```ruby
+First, add the following to the `Product` model:
+
+```ruby#2
 class Product
   has_rich_text :description
   validates :name, presence: true
@@ -1442,7 +1466,7 @@ end
 
 The form can now be updated to include a rich text field for editing the description in `app/views/products/_form.html.erb` before the submit button.
 
-```erb
+```erb#4-7
 <%= form_with model: product do |form| %>
   <%# ... %>
 
@@ -1459,7 +1483,7 @@ The form can now be updated to include a rich text field for editing the descrip
 
 Our controller also needs to permit this new parameter when the form is submitted, so we'll update the permitted params to include description in `app/controllers/products_controller.rb`
 
-```ruby
+```ruby#3
     # Only allow a list of trusted parameters through.
     def product_params
       params.expect(product: [ :name, :description ])
@@ -1468,7 +1492,7 @@ Our controller also needs to permit this new parameter when the form is submitte
 
 We also need to update the show view to display the description in `app/views/products/show.html.erb`:
 
-```erb
+```erb#3
 <% cache @product do %>
   <h1><%= @product.name %></h1>
   <%= @product.description %>
@@ -1486,11 +1510,11 @@ File Uploads with Active Storage
 
 Action Text is built upon another feature of Rails called Active Storage that makes it easy to upload files.
 
-Try editing a product and dragging an image into the rich text editor, and then update the record. You'll see that Rails uploads this image and renders it inside the rich text editor. Cool, right?!
+Try editing a product and dragging an image into the rich text editor, then update the record. You'll see that Rails uploads this image and renders it inside the rich text editor. Cool, right?!
 
 We can also use Active Storage directly. Let's add a featured image to the `Product` model.
 
-```ruby
+```ruby#2
 class Product
   has_one_attached :featured_image
   has_rich_text :description
@@ -1500,7 +1524,7 @@ end
 
 Then we can add a file upload field to our product form before the submit button:
 
-```erb
+```erb#4-7
 <%= form_with model: product do |form| %>
   <%# ... %>
 
@@ -1517,7 +1541,7 @@ Then we can add a file upload field to our product form before the submit button
 
 Add `:featured_image` as a permitted parameter in `app/controllers/products_controller.rb`
 
-```ruby
+```ruby#3
     # Only allow a list of trusted parameters through.
     def product_params
       params.expect(product: [ :name, :description, :featured_image ])
@@ -1556,7 +1580,7 @@ en:
   hello: "Hello world"
 ```
 
-Let's create a new locale file for Spanish and add a translation in `config/locales/es.yml`.
+Let's create a new locale file in our editor for Spanish and add a translation in `config/locales/es.yml`.
 
 ```yaml
 es:
@@ -1623,7 +1647,7 @@ A common feature of e-commerce stores is an email subscription to get notified w
 
 ### Basic Inventory Tracking
 
-First, let's add an inventory count to the Product model so we can keep track of it. We can generate this migration using the following command:
+First, let's add an inventory count to the Product model so we can keep track of stock. We can generate this migration using the following command:
 
 ```bash
 $ bin/rails generate migration AddInventoryCountToProducts inventory_count:integer
@@ -1889,7 +1913,7 @@ Performed ActionMailer::MailDeliveryJob (Job ID: 5e2bd5f2-f54f-4088-ace3-3f6eb15
 
 To trigger these emails, we can use a callback in the Product model to send emails anytime the inventory count changes from 0 to a positive number.
 
-```ruby
+```ruby#9-19
 class Product < ApplicationRecord
   has_one_attached :featured_image
   has_rich_text :description
@@ -1949,10 +1973,9 @@ end
 
 When you include a module in a class, any code inside the `included` block runs as if it’s part of that class. At the same time, the methods defined in the module become regular methods you can call on objects (instances) of that class.
 
-
 Now that the code triggering the notification has been extracted into the Notification module, the Product model can be simplified to include the Notifications module.
 
-```ruby
+```ruby#2
 class Product < ApplicationRecord
   include Notifications
 
@@ -2221,7 +2244,7 @@ Deploying to Production
 
 And now the fun part: let’s deploy your app.
 
-Rails comes with a deployment tool called [Kamal](https://kamal-deploy.org) that we can use to deploy our  application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
+Rails comes with a deployment tool called [Kamal](https://kamal-deploy.org) that we can use to deploy our application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
 
 By default, Rails comes with a production-ready Dockerfile that Kamal will use to build the Docker image, creating a containerized version of your application with all its dependencies and configurations. This Dockerfile uses [Thruster](https://github.com/basecamp/thruster) to compress and serve assets efficiently in production.
 
@@ -2306,6 +2329,8 @@ Now you can log in to production with this email and password and manage product
 
 ### Background Jobs using Solid Queue
 
+Background jobs are a way to run code in a process separate from the main application flow so it doesn't interrupt the user experience. Imagine sending in stock emails to 10,000 recipients. It could take a while to send that many emails so we can offload those to a background job to keep the Rails app responsive.
+
 In development, Rails uses the `:async` queue adapter to process background jobs with ActiveJob. Async stores pending jobs in memory but it will lose pending jobs on restart. This is great for development, but not production.
 
 To make background jobs more robust, Rails uses `solid_queue` for production environments. Solid Queue stores jobs in the database and executes them in a separate process.
@@ -2325,6 +2350,8 @@ We recommend continuing to add features and deploy updates to continue learning.
 * Add product reviews
 * Finish translating the app into another language
 * Add a checkout flow for payments
+* Add wishlists for users to save products
+* Add a carousel for product images
 
 We also recommend learning more by reading other Ruby on Rails Guides:
 

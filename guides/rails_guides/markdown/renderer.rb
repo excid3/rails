@@ -177,12 +177,19 @@ module RailsGuides
           end
         end
 
-        # Parses "ruby#3,4" into ["ruby", [3,4]] for highlighting line numbers in code blocks
+        # Parses "ruby#3,5-6,10" into ["ruby", [3,5,6,10]] for highlighting line numbers in code blocks
         def split_language_highlights(language)
           return [nil, []] unless language
 
           language, lines = language.split("#", 2)
-          [language, lines&.split(",")&.map(&:to_i)]
+          lines = lines.to_s.split(",").flat_map{ parse_range(_1) }
+
+          [language, lines]
+        end
+
+        def parse_range(range)
+          first, last = range.split("-", 2).map(&:to_i)
+          Range.new(first, last || first).to_a
         end
     end
   end
