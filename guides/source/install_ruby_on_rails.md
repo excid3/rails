@@ -17,7 +17,7 @@ Follow the section for the operating system you use:
 * [Ubuntu](#install-ruby-on-ubuntu)
 * [Windows](#install-ruby-on-windows)
 
-NOTE: Any commands prefaced with a dollar sign `$` should be run in the command line.
+TIP: Any commands prefaced with a dollar sign `$` should be run in the terminal.
 
 ### Install Ruby on macOS
 
