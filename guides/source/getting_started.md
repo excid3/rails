@@ -151,7 +151,7 @@ Puma starting in single mode...
 Use Ctrl-C to stop
 ```
 
-To see your Rails application, open http://localhost:3000 in your browser. You will see this:
+To see your Rails application, open http://localhost:3000 in your browser. You will see the default Rails welcome screen:
 
 ![Rails welcome page](images/getting_started/rails_welcome.png)
 
