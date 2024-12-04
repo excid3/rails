@@ -49,6 +49,7 @@ For this project, you will need:
 
 * Ruby 3.2 or newer
 * Rails 8.0.0 or newer
+* A code editor
 
 Follow the [Install Ruby on Rails Guide](install_ruby_on_rails.html) if you need to install Ruby and/or Rails.
 
@@ -83,7 +84,7 @@ $ cd store
 
 ### Directory Structure
 
-Let's take a quick glance at the files and directories that are included in a new Rails application.
+Let's take a quick glance at the files and directories that are included in a new Rails application. You can open this folder in your code editor or run `ls -la` in your terminal to see the files and directories.
 
 | File/Folder | Purpose |
 | ----------- | ------- |
