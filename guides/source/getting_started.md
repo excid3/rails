@@ -257,7 +257,7 @@ Now that we have created our products table, we can interact with it in Rails. L
 Rails Console
 -------------
 
-The *console* is a helpful tool for testing code in Rails applications. It's an interactive prompt built upon Ruby's IRB that automatically loads your Rails application.
+The *console* is a helpful tool for testing code in Rails applications. It's an interactive Ruby prompt that automatically loads your Rails application.
 
 ```bash
 $ bin/rails console
