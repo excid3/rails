@@ -525,11 +525,11 @@ To exit the Rails console, type `exit` and hit Enter.
 Routes
 ------
 
-A route in Rails is the part of the URL we want to use for "routing" our request to the correct code for processing. First, let's do a quick refresher of URLs and HTTP Request methods.
+In Rails, a route is the part of the URL that determines how an incoming HTTP request is directed to the appropriate controller and action for processing. First, let's do a quick refresher of URLs and HTTP Request methods.
 
 ### Parts of a URL
 
-A URL is made of several parts. Let's look at an example:
+Let's examine the different parts of a URL:
 
 ```
 http://example.org/products?sale=true&sort=asc
@@ -537,20 +537,21 @@ http://example.org/products?sale=true&sort=asc
 
 In this URL, each part has a name:
 
-- `https` is the protocol
-- `example.org` is the host
-- `/products` is the path
-- `?sale=true&sort=asc` is the query parameters
+- `https` is the **protocol**
+- `example.org` is the **host**
+- `/products` is the **path**
+- `?sale=true&sort=asc` are the **query parameters**
 
-A route in Rails defines which *path* to match and how to process it.
 
-### HTTP Methods
+### HTTP Methods and Their Purpose
 
-HTTP requests also require a "method" which tells the server what type of action should happen for that URL.
+HTTP requests use methods to tell the server what action it should perform. Here are the most common methods:
 
-A `GET` request to a URL tells the server to retrieve the data for the page.
+HTTP requests use methods to tell a server what action it should perform for a given URL. Here are the most common methods:
+
+A `GET` request tells the server to retrieve the data for a given URL (e.g., loading a page or fetching a record).
 A `POST` request will submit data to the URL for processing (usually creating a new record).
-A `PUT` or `PATCH` request submits data to a URL for updating a record.
+A `PUT` or `PATCH` request submits data to a URL to update an existing record.
 A `DELETE` request to a URL tells the server to delete a record.
 
 ### Rails Routes
@@ -565,9 +566,10 @@ Rails.application.routes.draw do
 end
 ```
 
-This route tells Rails to look for GET requests to the `/products` path. When Rails sees a request that matches, it will send the request to a Controller and Action for handling the request and generating a response.
 
-In this example, we specified `"products#index"` for where to route the request. This translates to a class named `ProductsController` and the `index` action inside of it. This will be responsible for handling the request and returning a response to the browser.
+This route tells Rails to look for GET requests to the `/products` path. In this example, we specified `"products#index"` for where to route the request. 
+
+When Rails sees a request that matches, it will send the request to the `ProductsController` and the `index` action inside of that controller. This is how Rails will the request and return a response to the browser.
 
 You'll notice that we don't need to specify the protocol, domain, or query params in our routes. That's basically because the protocol and domain make sure the request reaches your server. From there, Rails picks up the request and knows which path to use for responding to the request based on what routes are defined. The query params are like options that Rails can use to apply to the request, so they are typically used in the controller for filtering the data.
 
