@@ -353,7 +353,7 @@ store(dev)> Product.create(name: "Pants")
 
 We can also look up records from the database using our Active Record model.
 
-To find all the Product records in the database, we can use the `all` class method.
+To find all the Product records in the database, we can use the `all` method. This is a _class_ method, which is why we can use it on Product (versus an instance method that we would call on the product instance, like `save` above).
 
 ```irb
 store(dev)> Product.all
@@ -388,7 +388,9 @@ store(dev)> Product.order(name: :asc)
 
 ### Finding Records
 
-What if want to find one specific record? The `find` class method can be used to look up a single record by ID.
+What if we want to find one specific record? 
+
+We can do this by using the `find` class method to look up a single record by ID. Call the method and pass in the specific ID by using the following code:
 
 ```irb
 store(dev)> Product.find(1)
