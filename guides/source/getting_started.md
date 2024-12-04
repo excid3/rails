@@ -415,7 +415,7 @@ store(dev)> product.update(name: "Shoes")
 => true
 ```
 
-This will update the name of the "T-Shirt" product to "Shoes". Confirm this by running `Product.all` again.
+This updated the name of the "T-Shirt" product to "Shoes" in the database. Confirm this by running `Product.all` again.
 
 ```irb
 store(dev)> Product.all
@@ -438,9 +438,9 @@ You will see two products: Shoes and Pants.
   updated_at: "2024-12-02 20:30:02.997261000 +0000">]
 ```
 
-Alternatively, we can assign attributes in memory and  call `save` when we're ready to validate and save changes to the database.
+Alternatively, we can assign attributes and call `save` when we're ready to validate and save changes to the database.
 
-Let's change the name Shoe back to T-Shirt.
+Let's change the name "Shoes" back to "T-Shirt".
 
 ```irb
 store(dev)> product = Product.find(1)
@@ -640,6 +640,7 @@ resources :products
 ```
 
 TIP: If you don’t want all these CRUD actions, you specify exactly what you need. Check out the [routing guide](routing.html) for details.
+
 ### Routes Command
 
 Rails provides a command that displays all the routes your application responds to.
