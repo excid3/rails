@@ -388,7 +388,7 @@ store(dev)> Product.order(name: :asc)
 
 ### Finding Records
 
-What if we want to find one specific record? 
+What if we want to find one specific record?
 
 We can do this by using the `find` class method to look up a single record by ID. Call the method and pass in the specific ID by using the following code:
 
@@ -520,7 +520,16 @@ store(dev)> product.errors.full_messages
 
 Now let's build a web interface for our Products.
 
-To exit the Rails console, type `exit` and hit Enter.
+We are done with the console for now, so you can exit out of it by running `exit`.
+
+A Request's Journey Through Rails
+---------------------
+
+To get Rails saying "Hello", you need to create at minimum a _route_, a _controller_ with an _action_, and a _view_. A route maps a request to a controller action. A controller action performs the necessary work to handle the request, and prepares any data for the view. A view displays data in a desired format.
+
+In terms of implementation: Routes are rules written in a Ruby [DSL (Domain-Specific Language)](https://en.wikipedia.org/wiki/Domain-specific_language). Controllers are Ruby classes, and their public methods are actions. And views are templates, usually written in a mixture of HTML and Ruby.
+
+That's the short of it, but we’re going to walk through each of these steps in more detail next.
 
 Routes
 ------
