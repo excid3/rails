@@ -551,17 +551,14 @@ In this URL, each part has a name:
 - `/products` is the **path**
 - `?sale=true&sort=asc` are the **query parameters**
 
-
 ### HTTP Methods and Their Purpose
-
-HTTP requests use methods to tell the server what action it should perform. Here are the most common methods:
 
 HTTP requests use methods to tell a server what action it should perform for a given URL. Here are the most common methods:
 
-A `GET` request tells the server to retrieve the data for a given URL (e.g., loading a page or fetching a record).
-A `POST` request will submit data to the URL for processing (usually creating a new record).
-A `PUT` or `PATCH` request submits data to a URL to update an existing record.
-A `DELETE` request to a URL tells the server to delete a record.
+- A `GET` request tells the server to retrieve the data for a given URL (e.g., loading a page or fetching a record).
+- A `POST` request will submit data to the URL for processing (usually creating a new record).
+- A `PUT` or `PATCH` request submits data to a URL to update an existing record.
+- A `DELETE` request to a URL tells the server to delete a record.
 
 ### Rails Routes
 
@@ -575,8 +572,7 @@ Rails.application.routes.draw do
 end
 ```
 
-
-This route tells Rails to look for GET requests to the `/products` path. In this example, we specified `"products#index"` for where to route the request. 
+This route tells Rails to look for GET requests to the `/products` path. In this example, we specified `"products#index"` for where to route the request.
 
 When Rails sees a request that matches, it will send the request to the `ProductsController` and the `index` action inside of that controller. This is how Rails will the request and return a response to the browser.
 
@@ -590,7 +586,7 @@ post "/products", to: "products#create"
 
 Here, we've told Rails to take POST requests to "/products" and process them with the `ProductsController` using the `create` action.
 
-Routes may also need to dynamically match requests. So how does that work?
+Routes may also need to match URLs with certain patterns. So how does that work?
 
 ```ruby
 get "/products/:id", to: "products#show"
@@ -598,7 +594,7 @@ get "/products/:id", to: "products#show"
 
 This route has `:id` in it. This is called a `parameter` and it captures a portion of the URL to be used later for processing the request.
 
-If a user visits `/products/1`, the `:id` param is set to `1` and can be used in the controller action to look up and display the Product record with an ID of 1.
+If a user visits `/products/1`, the `:id` param is set to `1` and can be used in the controller action to look up and display the Product record with an ID of 1. `/products/2` would display Product with an ID of 2 and so on.
 
 Route parameters don't have to be Integers, either.
 
@@ -963,7 +959,7 @@ If you open this page in your browser and View Source, the HTML for the form wil
 
 The form builder has included a CSRF token for security, configured the form for UTF-8 support, set the input field names and even added a disabled state for the submit button.
 
-Since we passed in a new `Product`, the form builder generated a form that will send a `POST` request to `/products` to create a new one.
+Because we passed a new `Product` instance to the form builder, it automatically generated a form configured to send a `POST` request to `/products`, which is the default route for creating a new record.
 
 To handle this, we first need to implement the `create` action in our controller.
 
@@ -1357,7 +1353,7 @@ You can also update the Edit and Destroy links on the show view to only display 
 Caching Products
 ----------------
 
-Sometimes you may need to cache parts of a page for performance and Rails provides functionality to make this easy with Solid Cache, a database-backed cache store, that is included by default.
+Sometimes caching specific parts of a page can improve performance. Rails simplifies this process with Solid Cache, a database-backed cache store that comes included by default.
 
 Using the `cache` method, we can store HTML in the cache. Let's cache the header in `app/views/products/show.html.erb`.
 
@@ -1456,7 +1452,7 @@ We haven't written any JavaScript yet, but we have been using Hotwire on the fro
 
 Learn more in the [Asset Pipeline](asset_pipeline.html) and [Working with JavaScript in Rails](working_with_javascript_in_rails.html) guides.
 
-Rich text fields with Action Text
+Rich Text Fields with Action Text
 --------------------------------
 
 Many applications need rich text with embeds (i.e. multimedia elements) and Rails provides this functionality out of the box with Action Text.
@@ -1465,6 +1461,7 @@ To use Action Text, you'll first run the installer:
 
 ```bash
 $ bin/rails action_text:install
+$ bundle install
 $ bin/rails db:migrate
 ```
 
