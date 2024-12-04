@@ -277,7 +277,7 @@ store(dev)> Rails.version
 => "8.0.0"
 ```
 
-It works! Let's use the Rails console now to interact with our database using the Active Record model we just created.
+It works! 
 
 Active Record Model Basics
 -------------------------
