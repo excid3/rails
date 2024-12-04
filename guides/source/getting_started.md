@@ -151,7 +151,7 @@ Puma starting in single mode...
 Use Ctrl-C to stop
 ```
 
-To see your Rails application, open http://localhost:3000 in your browser. You will see this:
+To see your Rails application, open http://localhost:3000 in your browser. You will see the default Rails welcome page:
 
 ![Rails welcome page](images/getting_started/rails_welcome.png)
 
@@ -2329,7 +2329,7 @@ Now you can log in to production with this email and password and manage product
 
 ### Background Jobs using Solid Queue
 
-Background jobs are a way to run code in a process separate from the main application flow so it doesn't interrupt the user experience. Imagine sending in stock emails to 10,000 recipients. It could take a while to send that many emails so we can offload those to a background job to keep the Rails app responsive.
+Background jobs allow you to run tasks asynchronously behind-the-scenes in a separate process, preventing them from interrupting the user experience. Imagine sending in stock emails to 10,000 recipients. It could take a while, so we can offload that task to a background job to keep the Rails app responsive.
 
 In development, Rails uses the `:async` queue adapter to process background jobs with ActiveJob. Async stores pending jobs in memory but it will lose pending jobs on restart. This is great for development, but not production.
 
