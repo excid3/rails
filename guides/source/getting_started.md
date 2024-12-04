@@ -277,7 +277,7 @@ store(dev)> Rails.version
 => "8.0.0"
 ```
 
-It works! 
+It works!
 
 Active Record Model Basics
 -------------------------
@@ -295,11 +295,13 @@ When the `Product` model is used, Rails will query the database table for the co
 
 Let's use the Rails console to see what columns Rails detects for the Product model.
 
+Run:
+
 ```irb
 store(dev)> Product.column_names
 ```
 
-You should see:
+And you should see:
 
 ```irb
 => ["id", "name", "created_at", "updated_at"]
