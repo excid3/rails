@@ -249,7 +249,7 @@ This command checks for any new migrations and applies them to your database. It
 == 20240426151900 CreateProducts: migrated (0.0031s) ==========================
 ```
 
-If you make a mistake, you can run `rails db:rollback` to undo the last migration.
+TIP: If you make a mistake, you can run `rails db:rollback` to undo the last migration.
 
 Now that we have created our products table, we can interact with it in Rails. Let's try it out.
 
