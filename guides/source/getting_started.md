@@ -782,7 +782,7 @@ Let's update `app/views/products/index.html.erb` to render all of our product na
 </div>
 ```
 
-Using ERB, this code loops through each product in the `@products` `ActiveRecord::Relation` object and renders a div containing the product name.
+Using ERB, this code loops through each product in the `@products` `ActiveRecord::Relation` object and renders a `<div>` tag containing the product name.
 
 We've used a new ERB tag this time as well. `<% %>` evaluates the Ruby code but does not output the return value. That ignores the output of `@products.each` which would output an array that we don't want in our HTML.
 
@@ -812,9 +812,11 @@ end
 
 The `show` action here defines the *singular* `@product` because it's loading a single record from the database, in other words: Show this one product. We use plural `@products` in `index` because we're loading multiple products.
 
-To query the database, we use `params` to access the request parameters. In this case, we're using the `:id` from our route `/products/:id`. When we visit `/products/1`, the params hash will contain `{id: 1}` which results in our `show` action calling `Product.find(1)` to load Product with ID of `1` from the database.
+To query the database, we use `params` to access the request parameters. In this case, we're using the `:id` from our route `/products/:id`. When we visit `/products/1`, the params hash contains `{id: 1}` which results in our `show` action calling `Product.find(1)` to load Product with ID of `1` from the database.
 
-We need a view for the show action next. Following the Rails naming conventions, the `ProductsController` expects views in `app/views` in a subfolder named `products`. The `show` action expects a file in `app/views/products/show.html.erb`. Let's create that file in our editor and add the following contents:
+We need a view for the show action next. Following the Rails naming conventions, the `ProductsController` expects views in `app/views` in a subfolder named `products`.
+
+The `show` action expects a file in `app/views/products/show.html.erb`. Let's create that file in our editor and add the following contents:
 
 ```erb
 <h1><%= @product.name %></h1>
@@ -1004,7 +1006,7 @@ In `product_params`, we tell Rails to inspect the params and ensure there is a k
 
 After assigning these params to the new `Product`, we can try to save it to the database. `@product.save` tells Active Record to run validations and save the record to the database.
 
-If saving is successful, we want to redirect to the new product. When `redirect_to` is given an Active Record object, Rails generates a path for that record's show action.
+If `save` is successful, we want to redirect to the new product. When `redirect_to` is given an Active Record object, Rails generates a path for that record's show action.
 
 ```ruby
 redirect_to @product
@@ -1012,7 +1014,7 @@ redirect_to @product
 
 Since `@product` is a `Product` instance, Rails pluralizes the model name and includes the object's ID in the path to produce `"/products/2"` for the redirect.
 
-When the save is unsuccessful and the record wasn't valid, we want to re-render the form so the user can fix the invalid data. In the `else` clause, we tell Rails to `render :new`. Rails knows we're in the `Products` controller, so it should render `app/views/products/new.html.erb`. Since we've set the `@product` variable in `create`, we can render that template and the form will be populated with our `Product` data even though it wasn't able to be saved in the database.
+When `save` is unsuccessful and the record wasn't valid, we want to re-render the form so the user can fix the invalid data. In the `else` clause, we tell Rails to `render :new`. Rails knows we're in the `Products` controller, so it should render `app/views/products/new.html.erb`. Since we've set the `@product` variable in `create`, we can render that template and the form will be populated with our `Product` data even though it wasn't able to be saved in the database.
 
 We also set the HTTP status to 422 Unprocessable Entity to tell the browser this POST request failed and to handle it accordingly.
 
@@ -1440,6 +1442,8 @@ TIP: Each pin maps a JavaScript package name (e.g., `"@hotwired/turbo-rails"`) t
 
 Import maps keep the setup clean and minimal, while still supporting modern JavaScript features.
 
+What are these JavaScript files already in our import map? They are a frontend framework called Hotwire that Rails uses by default.
+
 ### Hotwire
 
 Hotwire is a JavaScript framework designed to take full advantage of server-side generated HTML. It is comprised of 3 core components:
@@ -1732,7 +1736,7 @@ By including `product:belongs_to` above, we told Rails that subscribers and prod
 
 A Product, however, can have many subscribers, so we then add `has_many :subscribers, dependent: :destroy` to our Product model to add the second part of this association between the two models. This tells Rails how to join queries between the two database tables.
 
-```ruby
+```ruby#2
 class Product < ApplicationRecord
   has_many :subscribers, dependent: :destroy
   has_one_attached :featured_image
