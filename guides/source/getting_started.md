@@ -252,12 +252,12 @@ This command checks for any new migrations and applies them to your database. It
 
 TIP: If you make a mistake, you can run `rails db:rollback` to undo the last migration.
 
-Now that we have created our products table, we can interact with it in Rails. Let's try it out.
-
 Rails Console
 -------------
 
-The *console* is a helpful tool for testing code in Rails applications. It's an interactive Ruby prompt that automatically loads your Rails application.
+Now that we have created our products table, we can interact with it in Rails. Let's try it out.
+
+For this, we're going to use a feature of Rails called the *console*.  The console is a helpful, interactive tool for testing our code in our Rails application.
 
 ```bash
 $ bin/rails console
