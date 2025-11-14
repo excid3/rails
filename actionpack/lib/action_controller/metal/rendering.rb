@@ -192,6 +192,11 @@ module ActionController
       super || _render_in_priorities(options) || " "
     end
 
+    def render_error(*args, &block)
+      options = _normalize_render(*args, &block).with_defaults(status: :unprocessable_entity)
+      render options, &block
+    end
+
     private
       # Before processing, set the request formats in current controller formats.
       def process_action(*) # :nodoc:

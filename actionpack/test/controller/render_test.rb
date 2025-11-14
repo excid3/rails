@@ -129,6 +129,14 @@ class TestController < ActionController::Base
     render file: file
   end
 
+  def action_with_error
+    render_error :hello_world
+  end
+
+  def json_with_error
+    render_error json: "hello_world"
+  end
+
   class Collection
     def initialize(records)
       @records = records
@@ -510,6 +518,20 @@ class ExpiresInRenderTest < ActionController::TestCase
   def test_cache_control_no_store_overridden_by_expires_now
     get :cache_control_no_store_overridden_by_expires_now
     assert_equal "no-cache", @response.headers["Cache-Control"]
+  end
+end
+
+class RenderErrorTest < ActionController::TestCase
+  tests TestController
+
+  def test_render_error_with_action
+    get :action_with_error
+    assert_response :unprocessable_entity
+  end
+
+  def test_render_error_with_json
+    get :action_with_error
+    assert_response :unprocessable_entity
   end
 end
 
