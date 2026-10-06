@@ -3,11 +3,8 @@
 require "cases/helper"
 
 class Account
-  extend ActiveModel::Callbacks
   include ActiveModel::Attributes
   include ActiveModel::SchematizedJson
-
-  define_model_callbacks :save
 
   attribute :settings
   has_json :settings, restricts_access: true, max_invites: 10, greeting: "Hello!", beta: :boolean
@@ -20,6 +17,9 @@ class Account
 
   attribute :broken
   has_json :broken, creation: :datetime, nesting: {}
+
+  attribute :mutable_defaults
+  has_json :mutable_defaults, greeting: +"Hello!"
 end
 
 class SchematizedJsonTest < ActiveModel::TestCase
@@ -74,6 +74,22 @@ class SchematizedJsonTest < ActiveModel::TestCase
   test "schema defaults will not overwrite attribute defaults" do
     assert_not @account.flags_with_defaults.staff?
     assert @account.flags_with_defaults.early_adopter?
+  end
+
+  test "defaults are not shared between records" do
+    @account.mutable_defaults.greeting << "!"
+    assert_equal "Hello!", Account.new.mutable_defaults.greeting
+  end
+
+  test "defaults are stored in the attribute" do
+    @account.settings.max_invites
+    assert_equal({ "restricts_access" => true, "max_invites" => 10, "greeting" => "Hello!", "beta" => nil }, @account.attributes["settings"])
+  end
+
+  test "mass assignment of an unknown key raises" do
+    assert_raises(NoMethodError) do
+      @account.settings = { "max_invites" => "5", "unknown" => "value" }
+    end
   end
 
   test "only standard json types are acceptable schema types" do
