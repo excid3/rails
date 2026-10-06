@@ -15,6 +15,9 @@ class Account
   attribute :flags_with_defaults, default: { "staff" => false, "early_adopter" => true }
   has_json :flags_with_defaults, staff: true, early_adopter: false
 
+  attribute :preferences
+  has_json :preferences, tags: [:string], favorite_ids: [:integer], locales: ["en", "fr"], toggles: [true, false]
+
   attribute :mutable_defaults
   has_json :mutable_defaults, greeting: +"Hello!"
 end
@@ -89,8 +92,50 @@ class SchematizedJsonTest < ActiveModel::TestCase
     end
   end
 
+  test "array declared with a type defaults to empty" do
+    assert_equal [], @account.preferences.tags
+    assert_not @account.preferences.tags?
+
+    @account.preferences.tags << "ruby"
+    assert @account.preferences.tags?
+  end
+
+  test "array with default" do
+    assert_equal ["en", "fr"], @account.preferences.locales
+    assert @account.preferences.locales?
+  end
+
+  test "array elements are cast to the element type" do
+    @account.preferences.favorite_ids = ["1", 2, "3"]
+    assert_equal [1, 2, 3], @account.preferences.favorite_ids
+
+    @account.preferences.toggles = ["true", "0", false]
+    assert_equal [true, false, false], @account.preferences.toggles
+  end
+
+  test "array elements that are blank strings or nil are dropped" do
+    @account.preferences.tags = ["", " ", "ruby", nil, "rails"]
+    assert_equal ["ruby", "rails"], @account.preferences.tags
+
+    @account.preferences.favorite_ids = ["", " ", "1"]
+    assert_equal [1], @account.preferences.favorite_ids
+  end
+
+  test "array assignment wraps a single value and keeps nil" do
+    @account.preferences.tags = "ruby"
+    assert_equal ["ruby"], @account.preferences.tags
+
+    @account.preferences.tags = nil
+    assert_nil @account.preferences.tags
+  end
+
   test "invalid schema types are rejected when declared" do
-    [{ creation: :datetime }, { nesting: {} }, { time: Time.now }].each do |schema|
+    invalid_schemas = [
+      { creation: :datetime }, { nesting: {} }, { time: Time.now },
+      { empty: [] }, { nested: [[1]] }, { mixed: [1, "a"] }, { hashes: [{}] }, { unsupported: [:datetime] }
+    ]
+
+    invalid_schemas.each do |schema|
       assert_raises(ArgumentError, "expected #{schema} to be rejected") do
         Class.new(Account) { attribute :broken; has_json :broken, **schema }
       end
